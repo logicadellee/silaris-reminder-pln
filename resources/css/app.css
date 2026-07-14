@@ -1,0 +1,81 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+:root {
+    color-scheme: light;
+    --app-bg: #F5F7FA;
+    --app-font: "Poppins", sans-serif;
+}
+
+body {
+    background-color: var(--app-bg);
+    font-family: var(--app-font);
+}
+
+.app-shell {
+    min-height: 100vh;
+}
+
+.app-sidebar {
+    width: 260px;
+}
+
+.app-navbar {
+    min-height: 72px;
+}
+
+.app-content {
+    padding: 1.5rem;
+}
+
+.app-footer {
+    padding: 1rem 1.5rem;
+}
+
+.card {
+    border-radius: 1rem;
+}
+
+.navbar-brand img {
+    max-height: 2rem;
+}
+
+.table thead th {
+    border-bottom-width: 1px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+.section-title {
+    letter-spacing: 0.02em;
+}
+
+.page-shell {
+    min-height: 100vh;
+}
+
+.dashboard-chart {
+    min-height: 320px;
+}
+
+#monthlyReminderChart {
+    min-height: 320px;
+}
+
+.auth-card {
+    max-width: 28rem;
+}
+
+.sidebar-brand-badge {
+    width: 48px;
+    height: 48px;
+}
+
+@import "silaris.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";

@@ -13,7 +13,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+// Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
@@ -21,6 +21,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('pelanggan', PelangganController::class);
 
     Route::resource('tagihan', TagihanController::class);
+
+    Route::get('/tagihan/{id}/reminder',
+    [TagihanController::class,'reminder'])
+    ->name('tagihan.reminder');
+
+    Route::get('/tagihan/{tagihan}/reminder', [TagihanController::class,'reminder'])
+        ->name('tagihan.reminder');
+
+    Route::post('/tagihan/{id}/send', [TagihanController::class,'sendReminder'])
+        ->name('tagihan.send');
+
+    Route::post('/tagihan/import', [TagihanController::class, 'import'])
+        ->name('tagihan.import');
 
     Route::resource('reminder', ReminderController::class);
 
@@ -35,6 +48,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
 
-});
+// });
 
 require __DIR__.'/auth.php';

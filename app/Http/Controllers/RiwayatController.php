@@ -54,6 +54,24 @@ class RiwayatController extends Controller
         //
     }
 
+    public function sendReminder(Tagihan $tagihan)
+    {
+        $tagihan->load('pelanggan');
+
+        RiwayatPengiriman::create([
+            'pelanggan_id' => $tagihan->pelanggan_id,
+            'tagihan_id' => $tagihan->id,
+            'nomor_whatsapp' => $tagihan->pelanggan->nomor_whatsapp,
+            'pesan' => "Reminder pembayaran tagihan listrik.",
+            'status' => 'Berhasil',
+            'waktu_pengiriman' => now(),
+        ]);
+
+        return redirect()
+            ->route('tagihan.index')
+            ->with('success','Reminder berhasil dikirim (Dummy).');
+    }
+
     /**
      * Remove the specified resource from storage.
      */
@@ -61,4 +79,5 @@ class RiwayatController extends Controller
     {
         //
     }
+
 }

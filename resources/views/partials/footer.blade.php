@@ -1,12 +1,33 @@
-<footer class="app-footer border-top bg-white">
-    <div class="container-fluid px-4 py-3">
-        <div class="row align-items-center g-2">
-            <div class="col-12 col-md-8 text-center text-md-start small text-muted">
-                © 2026 SILARIS - Sistem Reminder Pembayaran Tagihan Listrik
+<footer class="bg-white border-top py-3 mt-4">
+
+    <div class="container-fluid">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+            <div>
+
+                <small class="text-muted">
+
+                    © {{ date('Y') }} <strong>SILARIS</strong>
+
+                    | Sistem Reminder Pembayaran Tagihan Listrik
+
+                </small>
+
             </div>
-            <div class="col-12 col-md-4 text-center text-md-end small fw-semibold text-primary">
-                Versi 1.0.0
+
+            <div>
+
+                <small class="text-muted">
+
+                    PT PLN (Persero) ULP Way Halim
+
+                </small>
+
             </div>
+
         </div>
+
     </div>
+
 </footer>

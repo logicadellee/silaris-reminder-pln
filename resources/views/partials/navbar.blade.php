@@ -1,60 +1,66 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
-    <div class="container-fluid px-4 py-2">
-        <div class="d-flex align-items-center gap-3">
+<nav class="navbar navbar-expand-lg bg-white shadow-sm rounded-4 px-4 py-3 mb-4">
+
+    <div class="container-fluid">
+
+        <div>
+
+            <h4 class="fw-bold mb-0 text-primary">
+                Sistem Reminder Pembayaran Tagihan Listrik
+            </h4>
+
+            <small class="text-muted">
+                PT PLN (Persero) ULP Way Halim
+            </small>
+
+        </div>
+
+        <div class="ms-auto d-flex align-items-center">
+
+            {{-- Notifikasi --}}
+
             <button
-                class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center p-2"
-                type="button"
-                aria-label="Toggle sidebar"
-            >
-                <i class="bi bi-list fs-5"></i>
+                class="btn btn-light position-relative rounded-circle me-4"
+                style="width:48px;height:48px;">
+
+                <i class="bi bi-bell-fill fs-5 text-primary"></i>
+
+                <span
+                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+                    0
+
+                </span>
+
             </button>
 
-            <div>
-                <h1 class="h5 mb-0 text-dark fw-semibold">
-                    @yield('title', 'Dashboard')
-                </h1>
+            {{-- Admin --}}
+
+            <div class="d-flex align-items-center">
+
+                <div
+                    class="rounded-circle bg-primary d-flex justify-content-center align-items-center text-white fw-bold"
+                    style="width:50px;height:50px;font-size:20px;">
+
+                    <i class="bi bi-person-fill"></i>
+
+                </div>
+
+                <div class="ms-3">
+
+                    <h6 class="mb-0 fw-bold">
+                        Administrator
+                    </h6>
+
+                    <small class="text-muted">
+                        Admin SILARIS
+                    </small>
+
+                </div>
+
             </div>
+
         </div>
 
-        <div class="ms-auto d-flex align-items-center gap-3">
-            <span class="text-muted small fw-semibold d-none d-md-inline">
-                {{ now()->translatedFormat('l, d F Y') }}
-            </span>
-
-            @auth
-                <span class="text-dark fw-semibold d-none d-lg-inline">
-                    {{ Auth::user()->name }}
-                </span>
-            @endauth
-
-            <div class="dropdown">
-                <button
-                    class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center gap-2"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                >
-                    <i class="bi bi-person-circle fs-5"></i>
-                </button>
-
-                <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                    <li>
-                        <a class="dropdown-item" href="{{ route('profile.edit') }}">
-                            <i class="bi bi-person me-2"></i>
-                            Profil
-                        </a>
-                    </li>
-                    <li>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="dropdown-item">
-                                <i class="bi bi-box-arrow-right me-2"></i>
-                                Logout
-                            </button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </div>
     </div>
+
 </nav>

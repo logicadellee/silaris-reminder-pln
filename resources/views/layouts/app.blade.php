@@ -1,48 +1,78 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'SILARIS') }}</title>
+<head>
 
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body>
-        <div class="app-shell container-fluid px-0">
-            <div class="row g-0 min-vh-100">
-                <aside class="app-sidebar col-auto border-end bg-white">
-                    @include('partials.sidebar')
-                </aside>
+    <title>{{ config('app.name', 'SILARIS') }}</title>
 
-                <div class="col d-flex flex-column">
-                    <header class="app-navbar border-bottom bg-white">
-                        @include('partials.navbar')
-                    </header>
+    {{-- Google Font --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-                    <main class="app-content flex-grow-1">
-                        @isset($header)
-                            <div class="mb-4">
-                                {{ $header }}
-                            </div>
-                        @endisset
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
-                        {{ $slot }}
-                    </main>
+    {{-- Bootstrap Icons --}}
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-                    <footer class="app-footer border-top bg-white">
-                        @include('partials.footer')
-                    </footer>
-                </div>
+    @vite([
+        'resources/css/app.css',
+        'resources/css/silaris.css',
+        'resources/js/app.js'
+    ])
+
+</head>
+
+<body>
+
+    <div class="d-flex">
+
+        {{-- Sidebar --}}
+        @include('partials.sidebar')
+
+        {{-- Main --}}
+        <div class="flex-grow-1 app-content">
+
+            {{-- Navbar --}}
+            @include('partials.navbar')
+
+            <div class="container-fluid py-4">
+
+                @isset($header)
+
+                    <div class="mb-4">
+
+                        {{ $header }}
+
+                    </div>
+
+                @endisset
+
+                {{ $slot }}
+
             </div>
+
+            {{-- Footer --}}
+            @include('partials.footer')
+
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.0/dist/sweetalert2.all.min.js"></script>
-    </body>
+    </div>
+
+    {{-- Bootstrap --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    {{-- Sweetalert --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    {{-- ChartJS --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+
 </html>

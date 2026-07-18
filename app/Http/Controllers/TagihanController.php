@@ -13,13 +13,42 @@ class TagihanController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tagihans = Tagihan::with('pelanggan')->latest()->get();
+        $query = Tagihan::with('pelanggan');
+
+        // Cari pelanggan
+        if ($request->filled('search')) {
+
+            $search = $request->search;
+
+            $query->whereHas('pelanggan', function ($q) use ($search) {
+
+                $q->where('nama_pelanggan', 'like', "%{$search}%")
+                ->orWhere('id_pelanggan', 'like', "%{$search}%");
+
+            });
+        }
+
+    // Filter status
+    if ($request->filled('status')) {
+
+        $query->where('status_pembayaran', $request->status);
+
+    }
+
+    // Filter periode
+    if ($request->filled('periode')) {
+
+        $query->where('periode', $request->periode);
+
+    }
+
+        $tagihans = $query->latest()->get();
 
         return view('tagihan.index', compact('tagihans'));
     }
-
+    
     /**
      * Show the form for creating a new resource.
      */

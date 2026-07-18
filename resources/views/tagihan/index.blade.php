@@ -47,139 +47,25 @@
 
         {{-- Statistik --}}
 
-        <div class="row g-4 mb-4">
+        <div class="row g-3 mb-4">
 
-            <div class="col-xl-3 col-md-6">
+        <div class="col-lg-3 col-md-6">
 
-                <div class="card border-0 shadow-sm">
+            <div class="card dashboard-card total-card h-100">
 
-                    <div class="card-body d-flex justify-content-between align-items-center">
+                <div class="card-body d-flex justify-content-between align-items-center">
 
-                        <div>
+                    <div>
 
-                            <small class="text-muted">
+                        <small>Total Tagihan</small>
 
-                                Total Tagihan
+                        <h2>{{ $tagihans->count() }}</h2>
 
-                            </small>
-
-                            <h3 class="fw-bold">
-
-                                {{ $tagihans->count() }}
-
-                            </h3>
-
-                        </div>
-
-                        <div class="bg-primary bg-opacity-10 rounded-circle p-3">
-
-                            <i class="bi bi-receipt fs-2 text-primary"></i>
-
-                        </div>
+                        <span>Data</span>
 
                     </div>
 
-                </div>
-
-            </div>
-
-            <div class="col-xl-3 col-md-6">
-
-                <div class="card border-0 shadow-sm">
-
-                    <div class="card-body d-flex justify-content-between align-items-center">
-
-                        <div>
-
-                            <small class="text-muted">
-
-                                Belum Bayar
-
-                            </small>
-
-                            <h3 class="fw-bold text-warning">
-
-                                {{ $tagihans->where('status_pembayaran','Belum Bayar')->count() }}
-
-                            </h3>
-
-                        </div>
-
-                        <div class="bg-warning bg-opacity-10 rounded-circle p-3">
-
-                            <i class="bi bi-exclamation-circle fs-2 text-warning"></i>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-xl-3 col-md-6">
-
-                <div class="card border-0 shadow-sm">
-
-                    <div class="card-body d-flex justify-content-between align-items-center">
-
-                        <div>
-
-                            <small class="text-muted">
-
-                                Sudah Lunas
-
-                            </small>
-
-                            <h3 class="fw-bold text-success">
-
-                                {{ $tagihans->where('status_pembayaran','Lunas')->count() }}
-
-                            </h3>
-
-                        </div>
-
-                        <div class="bg-success bg-opacity-10 rounded-circle p-3">
-
-                            <i class="bi bi-check-circle fs-2 text-success"></i>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-xl-3 col-md-6">
-
-                <div class="card border-0 shadow-sm">
-
-                    <div class="card-body d-flex justify-content-between align-items-center">
-
-                        <div>
-
-                            <small class="text-muted">
-
-                                Reminder Siap Dikirim
-
-                            </small>
-
-                            <h3 class="fw-bold text-info">
-
-                                {{ $tagihans->where('status_pembayaran','Belum Bayar')->count() }}
-
-                            </h3>
-
-                        </div>
-
-                        <div class="bg-info bg-opacity-10 rounded-circle p-3">
-
-                            <i class="bi bi-whatsapp fs-2 text-info"></i>
-
-                        </div>
-
-                    </div>
+                    <i class="bi bi-receipt icon-card"></i>
 
                 </div>
 
@@ -187,11 +73,93 @@
 
         </div>
 
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card dashboard-card warning-card h-100">
+
+                <div class="card-body d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <small>Belum Bayar</small>
+
+                        <h2>{{ $tagihans->where('status_pembayaran','Belum Bayar')->count() }}</h2>
+
+                        <span>Data</span>
+
+                    </div>
+
+                    <i class="bi bi-exclamation-circle icon-card"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card dashboard-card success-card h-100">
+
+                <div class="card-body d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <small>Sudah Lunas</small>
+
+                        <h2>{{ $tagihans->where('status_pembayaran','Lunas')->count() }}</h2>
+
+                        <span>Data</span>
+
+                    </div>
+
+                    <i class="bi bi-check-circle icon-card"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card dashboard-card info-card h-100">
+
+                <div class="card-body d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <small>Reminder Siap Dikirim</small>
+
+                        <h2>{{ $tagihans->where('status_pembayaran','Belum Bayar')->count() }}</h2>
+
+                        <span>Data</span>
+
+                    </div>
+
+                    <i class="bi bi-whatsapp icon-card"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
         {{-- Filter --}}
 
-        <div class="card border-0 shadow-sm mb-4">
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
 
             <div class="card-body">
+
+            <h5 class="fw-bold text-primary mb-4">
+
+            <i class="bi bi-funnel-fill"></i>
+
+            Filter Data
+
+            </h5>
 
                 <form
                     method="GET"
@@ -210,6 +178,7 @@
                             <input
                                 type="text"
                                 name="search"
+                                value="{{ request('search') }}"
                                 class="form-control"
                                 placeholder="ID Pelanggan / Nama Pelanggan">
 
@@ -227,21 +196,19 @@
                                 name="status"
                                 class="form-select">
 
-                                <option value="">
+                                <option value="">Semua Status</option>
 
-                                    Semua Status
+                                <option value="Belum Bayar"
+                                {{ request('status')=='Belum Bayar' ? 'selected' : '' }}>
 
-                                </option>
-
-                                <option value="Belum Bayar">
-
-                                    Belum Bayar
+                                Belum Bayar
 
                                 </option>
 
-                                <option value="Lunas">
+                                <option value="Lunas"
+                                {{ request('status')=='Lunas' ? 'selected' : '' }}>
 
-                                    Lunas
+                                Lunas
 
                                 </option>
 
@@ -260,6 +227,7 @@
                             <input
                                 type="month"
                                 name="periode"
+                                value="{{ request('periode') }}"
                                 class="form-control">
 
                         </div>
@@ -267,19 +235,29 @@
                         <div class="col-lg-2 d-grid">
 
                             <label class="form-label text-white">
-
-                                .
-
+        .
                             </label>
 
-                            <button
-                                class="btn btn-primary">
+                            <div class="d-flex gap-2">
 
-                                <i class="bi bi-search"></i>
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary flex-fill">
 
-                                Cari
+                                    <i class="bi bi-search"></i>
 
-                            </button>
+                                    Cari
+
+                                </button>
+
+                                <a href="{{ route('tagihan.index') }}"
+                                    class="btn btn-outline-secondary">
+
+                                    <i class="bi bi-arrow-clockwise"></i>
+
+                                </a>
+
+                            </div>
 
                         </div>
 
@@ -303,16 +281,6 @@
                             Import Excel
 
                         </button>
-
-                        <!-- <a
-                            href="{{ route('tagihan.create') }}"
-                            class="btn btn-primary">
-
-                            <i class="bi bi-plus-circle"></i>
-
-                            Tambah Tagihan
-
-                        </a> -->
 
                     </div>
 
@@ -340,7 +308,7 @@
 
         <table class="table table-hover align-middle mb-0">
 
-            <thead class="table-light">
+            <thead class="table-dark">
 
                 <tr>
 
@@ -427,7 +395,7 @@
 
                             <a
                                 href="{{ route('tagihan.show',$tagihan->id) }}"
-                                class="btn btn-info btn-sm">
+                                class="btn btn-primary btn-sm rounded-pill px-3"
 
                                 <i class="bi bi-eye"></i>
 
@@ -439,7 +407,7 @@
 
                                 <a
                                     href="{{ route('tagihan.reminder',$tagihan->id) }}"
-                                    class="btn btn-success btn-sm">
+                                    class="btn btn-success btn-sm rounded-pill px-3"
 
                                     <i class="bi bi-whatsapp"></i>
 
@@ -459,12 +427,23 @@
 
                 <tr>
 
-                    <td colspan="8" class="text-center py-4">
+                    <td colspan="8" class="text-center py-5">
 
-                        Belum ada data tagihan.
+                        <i class="bi bi-inbox display-3 text-primary"></i>
+
+                        <h5 class="mt-3">
+
+                            Belum ada data tagihan
+
+                        </h5>
+
+                        <p class="text-muted">
+
+                            Silakan import file Excel PLN terlebih dahulu.
+
+                        </p>
 
                     </td>
-
                 </tr>
 
                 @endforelse
@@ -505,7 +484,7 @@
             </div>
 
             <form
-                action="#"
+                action="{{ route('tagihan.import') }}"
                 method="POST"
                 enctype="multipart/form-data">
 
@@ -565,7 +544,7 @@
 
                     <button
                         type="submit"
-                        class="btn btn-success">
+                        class="btn btn-warning fw-bold px-4">
 
                         <i class="bi bi-upload"></i>
 

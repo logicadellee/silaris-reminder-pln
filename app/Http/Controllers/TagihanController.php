@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pelanggan;
 use App\Models\Tagihan;
 use Illuminate\Http\Request;
-use App\Imports\TagihanImport;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Models\RiwayatPengiriman;
 
 class TagihanController extends Controller
 {
@@ -44,7 +43,10 @@ class TagihanController extends Controller
 
     }
 
-        $tagihans = $query->latest()->get();
+        $tagihans = $query
+        ->latest()
+        ->paginate(30)
+        ->withQueryString();
 
         return view('tagihan.index', compact('tagihans'));
     }
@@ -182,23 +184,36 @@ class TagihanController extends Controller
         $pesan .= "Terima kasih.\n";
         $pesan .= "PT PLN (Persero) ULP Way Halim";
 
+
+        RiwayatPengiriman::create([
+
+            'pelanggan_id'=>$tagihan->pelanggan_id,
+
+            'tagihan_id'=>$tagihan->id,
+
+            'user_id'=>auth()->id(),
+
+            'template_nama'=>'Reminder Tagihan',
+
+            'isi_pesan'=>$pesan,
+
+            'status_pengiriman'=>'Berhasil',
+
+            'waktu_kirim'=>now(),
+
+            'response_code'=>'200',
+
+            'response_message'=>'Dummy WhatsApp',
+
+            'keterangan'=>'Reminder berhasil dikirim'
+
+        ]);
+        
         return redirect(
             "https://wa.me/$nomor?text=" . urlencode($pesan)
         );
     }
 
-    public function import(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,xls',
-        ]);
-
-        Excel::import(new TagihanImport, $request->file('file'));
-
-        return redirect()
-            ->route('tagihan.index')
-            ->with('success', 'Data tagihan berhasil diimpor.');
-    }
     /**
      * Remove the specified resource from storage.
      */

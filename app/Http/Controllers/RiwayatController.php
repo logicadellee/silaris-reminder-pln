@@ -2,82 +2,71 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RiwayatPengiriman;
 use Illuminate\Http\Request;
 
 class RiwayatController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        return view('riwayat.index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    public function sendReminder(Tagihan $tagihan)
-    {
-        $tagihan->load('pelanggan');
-
-        RiwayatPengiriman::create([
-            'pelanggan_id' => $tagihan->pelanggan_id,
-            'tagihan_id' => $tagihan->id,
-            'nomor_whatsapp' => $tagihan->pelanggan->nomor_whatsapp,
-            'pesan' => "Reminder pembayaran tagihan listrik.",
-            'status' => 'Berhasil',
-            'waktu_pengiriman' => now(),
+        $query = RiwayatPengiriman::with([
+            'pelanggan',
+            'tagihan'
         ]);
 
-        return redirect()
-            ->route('tagihan.index')
-            ->with('success','Reminder berhasil dikirim (Dummy).');
-    }
+        // Search
+        if ($request->filled('search')) {
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+            $search = $request->search;
 
+            $query->whereHas('pelanggan', function ($q) use ($search) {
+
+                $q->where('nama_pelanggan', 'like', "%$search%")
+                    ->orWhere('id_pelanggan', 'like', "%$search%");
+            });
+        }
+
+        // Filter Status
+        if ($request->filled('status')) {
+
+            $query->where(
+                'status_pengiriman',
+                $request->status
+            );
+
+        }
+
+        $riwayats = $query
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
+        $total = RiwayatPengiriman::count();
+
+        $berhasil = RiwayatPengiriman::where(
+            'status_pengiriman',
+            'Berhasil'
+        )->count();
+
+        $pending = RiwayatPengiriman::where(
+            'status_pengiriman',
+            'Pending'
+        )->count();
+
+        $gagal = RiwayatPengiriman::where(
+            'status_pengiriman',
+            'Gagal'
+        )->count();
+
+        return view(
+            'riwayat.index',
+            compact(
+                'riwayats',
+                'total',
+                'berhasil',
+                'pending',
+                'gagal'
+            )
+        );
+    }
 }

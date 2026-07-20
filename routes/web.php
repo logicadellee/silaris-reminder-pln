@@ -26,7 +26,7 @@ Route::get('/', function () {
     [TagihanController::class,'reminder'])
     ->name('tagihan.reminder');
 
-    Route::get('/tagihan/{tagihan}/reminder', [TagihanController::class,'reminder'])
+    Route::get('/tagihan/{id}/reminder', [TagihanController::class,'reminder'])
         ->name('tagihan.reminder');
 
     Route::post('/tagihan/{id}/send', [TagihanController::class,'sendReminder'])

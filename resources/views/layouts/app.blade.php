@@ -36,7 +36,7 @@
         @include('partials.sidebar')
 
         {{-- Main --}}
-        <div class="flex-grow-1 app-content">
+        <div class="flex-grow-1 app-content d-flex flex-column min-vh-100">
 
             {{-- Navbar --}}
             @include('partials.navbar')

@@ -1,85 +1,254 @@
 <x-app-layout>
 
-    <x-slot name="header">
-        <h2 class="fw-bold mb-0">
-            Kirim Reminder WhatsApp
-        </h2>
-    </x-slot>
+<div class="container-fluid">
 
-    <div class="container-fluid">
+<div class="row">
 
-        <div class="card shadow-sm border-0">
+<div class="col-lg-8">
 
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0">
-                    Preview Pesan Reminder
-                </h5>
-            </div>
+<div class="card shadow-sm border-0 rounded-4">
 
-            <div class="card-body">
+<div class="card-header bg-primary text-white">
 
-                <div class="mb-3">
-                    <label class="form-label">Nama Pelanggan</label>
+<h4 class="mb-0">
 
-                    <input
-                        type="text"
-                        class="form-control"
-                        value="{{ $tagihan->pelanggan->nama_pelanggan }}"
-                        readonly>
-                </div>
+<i class="bi bi-whatsapp"></i>
 
-                <div class="mb-3">
-                    <label class="form-label">Nomor WhatsApp</label>
+Preview Reminder WhatsApp
 
-                    <input
-                        type="text"
-                        class="form-control"
-                        value="{{ $tagihan->pelanggan->nomor_whatsapp }}"
-                        readonly>
-                </div>
+</h4>
 
-                <div class="mb-3">
-                    <label class="form-label">Isi Pesan</label>
+</div>
 
-                    <textarea
-                        class="form-control"
-                        rows="12"
-                        readonly>{{ $pesan }}</textarea>
-                </div>
+<div class="card-body">
 
-            </div>
+<div class="mb-4">
 
-            <div class="card-footer d-flex justify-content-between">
+<h6 class="fw-bold">
 
-                <a href="{{ route('tagihan.show',$tagihan->id) }}"
-                    class="btn btn-secondary">
+Data Pelanggan
 
-                    <i class="bi bi-arrow-left"></i>
-                    Kembali
+</h6>
 
-                </a>
+<hr>
 
-                <form
-                    action="{{ route('tagihan.send',$tagihan->id) }}"
-                    method="POST">
+<table class="table table-borderless">
 
-                    @csrf
+<tr>
 
-                    <button
-                        type="submit"
-                        class="btn btn-success">
+<th width="180">
 
-                        <i class="bi bi-whatsapp"></i>
-                        Kirim WhatsApp
+Nama
 
-                    </button>
+</th>
 
-                </form>
+<td>
 
-            </div>
+{{ $tagihan->pelanggan->nama_pelanggan }}
 
-        </div>
+</td>
 
-    </div>
+</tr>
+
+<tr>
+
+<th>
+
+ID Pelanggan
+
+</th>
+
+<td>
+
+{{ $tagihan->pelanggan->id_pelanggan }}
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Nomor WhatsApp
+
+</th>
+
+<td>
+
+{{ $tagihan->pelanggan->nomor_whatsapp }}
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Periode
+
+</th>
+
+<td>
+
+{{ $tagihan->periode }}
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Nominal
+
+</th>
+
+<td>
+
+Rp {{ number_format($tagihan->nominal,0,',','.') }}
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Jatuh Tempo
+
+</th>
+
+<td>
+
+{{ $tagihan->jatuh_tempo->format('d F Y') }}
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+<h6 class="fw-bold">
+
+Preview Pesan
+
+</h6>
+
+<hr>
+
+<div
+style="
+background:#e5ddd5;
+padding:25px;
+border-radius:15px;">
+
+<div
+style="
+background:white;
+padding:20px;
+border-radius:12px;
+white-space:pre-line;
+font-size:15px;
+line-height:1.7;">
+
+{{ $pesan }}
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card-footer bg-white d-flex justify-content-between">
+
+<a
+href="{{ route('tagihan.index') }}"
+class="btn btn-secondary">
+
+<i class="bi bi-arrow-left"></i>
+
+Kembali
+
+</a>
+
+<a
+href="{{ route('tagihan.send',$tagihan->id) }}"
+class="btn btn-success">
+
+<i class="bi bi-whatsapp"></i>
+
+Kirim WhatsApp
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card border-0 shadow-sm rounded-4">
+
+<div class="card-body text-center">
+
+<i
+class="bi bi-phone-fill text-success"
+style="font-size:90px"></i>
+
+<h5 class="mt-3">
+
+WhatsApp Gateway
+
+</h5>
+
+<p class="text-muted">
+
+Pesan akan dikirim ke nomor pelanggan melalui WhatsApp.
+
+</p>
+
+<hr>
+
+<p>
+
+Status Tagihan
+
+</p>
+
+@if($tagihan->status_pembayaran=="Belum Bayar")
+
+<span class="badge bg-warning fs-6">
+
+Belum Bayar
+
+</span>
+
+@else
+
+<span class="badge bg-success fs-6">
+
+Lunas
+
+</span>
+
+@endif
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 </x-app-layout>

@@ -16,23 +16,6 @@
 
         <div class="ms-auto d-flex align-items-center">
 
-            {{-- Notifikasi --}}
-
-            <button
-                class="btn btn-light position-relative rounded-circle me-4"
-                style="width:48px;height:48px;">
-
-                <i class="bi bi-bell-fill fs-5 text-primary"></i>
-
-                <span
-                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-
-                    0
-
-                </span>
-
-            </button>
-
             {{-- Admin --}}
 
             <div class="d-flex align-items-center">

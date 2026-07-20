@@ -18,7 +18,6 @@ Route::get('/', function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
-    // Route import pelanggan harus SEBELUM resource
     Route::get('/pelanggan/import', [PelangganController::class, 'importForm'])
         ->name('pelanggan.import.form');
 

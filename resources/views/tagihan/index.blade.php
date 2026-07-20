@@ -29,21 +29,13 @@
     @endif
 
 
-    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-
-        <div>
-
-            <h5 class="mb-1 fw-semibold">
-                Data Tagihan PLN
-            </h5>
-
-            <small class="text-muted">
-                Data tagihan diperoleh melalui proses import file Excel dari PLN.
-            </small>
-
-        </div>
-
+    <div class="page-title mb-4">
+        <p class="text-muted mb-0">
+            Menampilkan data tagihan pelanggan yang siap dikirim reminder pembayaran.
+        </p>
     </div>
+
+    <div class="row g-4 mb-4">
 
         {{-- Statistik --}}
 
@@ -267,25 +259,6 @@
 
                 <hr>
 
-                <div class="d-flex justify-content-between flex-wrap">
-
-                    <div class="d-flex gap-2">
-
-                        <button
-                            class="btn btn-success"
-                            data-bs-toggle="modal"
-                            data-bs-target="#importModal">
-
-                            <i class="bi bi-file-earmark-excel"></i>
-
-                            Import Excel
-
-                        </button>
-
-                    </div>
-
-                </div>
-
             </div>
 
         </div>
@@ -437,12 +410,6 @@
 
                         </h5>
 
-                        <p class="text-muted">
-
-                            Silakan import file Excel PLN terlebih dahulu.
-
-                        </p>
-
                     </td>
                 </tr>
 
@@ -453,114 +420,6 @@
         </table>
 
     </div>
-
-</div>
-
-{{-- Modal Import Excel --}}
-
-<div
-    class="modal fade"
-    id="importModal"
-    tabindex="-1">
-
-    <div class="modal-dialog">
-
-        <div class="modal-content">
-
-            <div class="modal-header">
-
-                <h5 class="modal-title">
-
-                    Import Data Tagihan
-
-                </h5>
-
-                <button
-                    class="btn-close"
-                    data-bs-dismiss="modal">
-
-                </button>
-
-            </div>
-
-            <form
-                action="{{ route('tagihan.import') }}"
-                method="POST"
-                enctype="multipart/form-data">
-
-                @csrf
-
-                <div class="modal-body">
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-
-                            File Excel
-
-                        </label>
-
-                        <input
-                            type="file"
-                            name="file"
-                            class="form-control"
-                            accept=".xlsx,.xls"
-                            required>
-
-                    </div>
-
-                    <div class="alert alert-info mb-0">
-
-                        <i class="bi bi-info-circle"></i>
-
-                        Upload file tagihan PLN format
-                        <strong>.xlsx</strong>
-                        atau
-                        <strong>.xls</strong>
-
-                    </div>
-
-                    <div class="alert alert-warning mt-3 mb-0">
-
-                        <i class="bi bi-exclamation-triangle-fill"></i>
-
-                        Data yang diimport akan digunakan sebagai dasar pengiriman reminder pembayaran.
-                        Pastikan format file sesuai dengan template PLN.
-
-                    </div>
-
-                </div>
-
-                <div class="modal-footer">
-
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal">
-
-                        Batal
-
-                    </button>
-
-                    <button
-                        type="submit"
-                        class="btn btn-warning fw-bold px-4">
-
-                        <i class="bi bi-upload"></i>
-
-                        Import
-
-                    </button>
-
-                </div>
-
-            </form>
-
-        </div>
-
-    </div>
-
-</div>
 
 </div>
 

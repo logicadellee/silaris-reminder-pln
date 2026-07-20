@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         @include('components.admin.page-header', [
-            'title' => 'Tambah Pelanggan',
-            'description' => 'Input data pelanggan baru secara manual ke sistem SILARIS.',
+            'title' => 'Import Data Pelanggan',
+            'description' => 'Upload file Excel untuk sinkronisasi data pelanggan.',
         ])
     </x-slot>
 
-    <x-admin.section-card title="Form Data Pelanggan" description="Lengkapi informasi pelanggan agar dapat digunakan untuk reminder tagihan.">
+    <x-admin.section-card title="Upload File Excel" description="Data pelanggan dan tagihan akan otomatis tersinkronisasi.">
 
         @if ($errors->any())
             <div class="alert alert-danger alert-dismissible fade show">
@@ -19,15 +19,18 @@
             </div>
         @endif
 
-        <form action="{{ route('pelanggan.store') }}" method="POST">
+        <form action="{{ route('pelanggan.import') }}" method="POST" enctype="multipart/form-data">
             @csrf
+            <div class="mb-4">
+                <label class="form-label fw-semibold">File Excel (.xlsx / .xls)</label>
+                <input type="file" name="file" class="form-control" accept=".xlsx,.xls" required>
+                <div class="form-text">Maksimal ukuran file 10MB.</div>
+            </div>
 
-            @include('pelanggan.partials.form')
-
-            <div class="d-flex gap-2 mt-4">
-                <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-save me-1"></i>
-                    Simpan
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-upload me-1"></i>
+                    Import Sekarang
                 </button>
                 <a href="{{ route('pelanggan.index') }}" class="btn btn-outline-secondary">
                     <i class="bi bi-arrow-left me-1"></i>

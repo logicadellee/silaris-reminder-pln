@@ -142,13 +142,13 @@
 
         const ctx = document.getElementById('dashboardChart');
 
-        new Chart(ctx,{
+        new Chart(ctx, {
 
-            type:'line',
+            type: 'line',
 
-            data:{
+            data: {
 
-                labels:[
+                labels: [
                     'Sen',
                     'Sel',
                     'Rab',
@@ -158,11 +158,11 @@
                     'Min'
                 ],
 
-                datasets:[{
+                datasets: [{
 
-                    label:'Reminder',
+                    label: 'Reminder',
 
-                    data:[
+                    data: [
                         0,
                         0,
                         0,
@@ -172,7 +172,7 @@
                         0
                     ],
 
-                    tension:0.4
+                    tension: 0.4
 
                 }]
 

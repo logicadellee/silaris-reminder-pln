@@ -14,19 +14,19 @@ class RiwayatController extends Controller
             'tagihan'
         ]);
 
-        // Search
         if ($request->filled('search')) {
 
             $search = $request->search;
 
             $query->whereHas('pelanggan', function ($q) use ($search) {
 
-                $q->where('nama_pelanggan', 'like', "%$search%")
-                    ->orWhere('id_pelanggan', 'like', "%$search%");
+                $q->where('nama_pelanggan','like',"%{$search}%")
+                    ->orWhere('id_pelanggan','like',"%{$search}%");
+
             });
+
         }
 
-        // Filter Status
         if ($request->filled('status')) {
 
             $query->where(
@@ -37,36 +37,32 @@ class RiwayatController extends Controller
         }
 
         $riwayats = $query
-            ->latest()
-            ->paginate(15)
+            ->latest('waktu_kirim')
+            ->paginate(20)
             ->withQueryString();
 
-        $total = RiwayatPengiriman::count();
+        return view('riwayat.index',[
 
-        $berhasil = RiwayatPengiriman::where(
-            'status_pengiriman',
-            'Berhasil'
-        )->count();
+            'riwayats'=>$riwayats,
 
-        $pending = RiwayatPengiriman::where(
-            'status_pengiriman',
-            'Pending'
-        )->count();
+            'total'=>RiwayatPengiriman::count(),
 
-        $gagal = RiwayatPengiriman::where(
-            'status_pengiriman',
-            'Gagal'
-        )->count();
+            'berhasil'=>RiwayatPengiriman::where(
+                'status_pengiriman',
+                'Berhasil'
+            )->count(),
 
-        return view(
-            'riwayat.index',
-            compact(
-                'riwayats',
-                'total',
-                'berhasil',
-                'pending',
-                'gagal'
-            )
-        );
+            'pending'=>RiwayatPengiriman::where(
+                'status_pengiriman',
+                'Pending'
+            )->count(),
+
+            'gagal'=>RiwayatPengiriman::where(
+                'status_pengiriman',
+                'Gagal'
+            )->count(),
+
+        ]);
     }
+
 }

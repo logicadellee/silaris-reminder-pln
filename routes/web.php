@@ -32,12 +32,13 @@ Route::get('/', function () {
     Route::post('/tagihan/{id}/send', [TagihanController::class,'sendReminder'])
         ->name('tagihan.send');
 
-    Route::post('/tagihan/import', [TagihanController::class, 'import'])
-        ->name('tagihan.import');
-
     Route::resource('reminder', ReminderController::class);
 
     Route::resource('riwayat', RiwayatController::class);
+
+    Route::post('/tagihan/{id}/send',
+    [TagihanController::class,'sendReminder'])
+    ->name('tagihan.send');
 
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');

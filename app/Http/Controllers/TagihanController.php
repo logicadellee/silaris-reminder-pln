@@ -16,7 +16,14 @@ class TagihanController extends Controller
     {
         $query = Tagihan::with('pelanggan');
 
-        // Cari pelanggan
+        if ($request->filled('periode')) {
+            $query->where('periode', $request->periode);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status_pembayaran', $request->status);
+        }
+
         if ($request->filled('search')) {
 
             $search = $request->search;
@@ -24,41 +31,29 @@ class TagihanController extends Controller
             $query->whereHas('pelanggan', function ($q) use ($search) {
 
                 $q->where('nama_pelanggan', 'like', "%{$search}%")
-                ->orWhere('id_pelanggan', 'like', "%{$search}%");
+                ->orWhere('id_pelanggan', 'like', "%{$search}%")
+                ->orWhere('nomor_whatsapp', 'like', "%{$search}%");
 
             });
+
         }
 
-    // Filter status
-    if ($request->filled('status')) {
-
-        $query->where('status_pembayaran', $request->status);
-
-    }
-
-    // Filter periode
-    if ($request->filled('periode')) {
-
-        $query->where('periode', $request->periode);
-
-    }
-
         $tagihans = $query
-        ->latest()
-        ->paginate(30)
-        ->withQueryString();
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
 
         return view('tagihan.index', compact('tagihans'));
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        $pelanggans = Pelanggan::orderBy('nama_pelanggan')->get();
+        
+        /**
+         * Show the form for creating a new resource.
+         */
+        public function create()
+        {
+            $pelanggans = Pelanggan::orderBy('nama_pelanggan')->get();
 
-        return view('tagihan.create', compact('pelanggans'));
+            return view('tagihan.create', compact('pelanggans'));
     }
 
     /**
@@ -95,9 +90,9 @@ class TagihanController extends Controller
      */
     public function show(Tagihan $tagihan)
     {
-        $tagihan->load('pelanggan');
-
-        return view('tagihan.show', compact('tagihan'));
+        return response()->json(
+            $tagihan->load('pelanggan')
+        );
     }
 
     /**
@@ -167,7 +162,13 @@ class TagihanController extends Controller
         $nomor = $tagihan->pelanggan->nomor_whatsapp;
 
         // Hilangkan karakter selain angka
-        $nomor = preg_replace('/[^0-9]/', '', $nomor);
+        if (empty($tagihan->pelanggan->nomor_whatsapp)) {
+
+        return back()->with(
+            'error',
+            'Nomor WhatsApp pelanggan belum diisi.'
+        );
+}
 
         // Ubah 08xxxx menjadi 628xxxx
         if (substr($nomor, 0, 1) == "0") {
@@ -193,7 +194,7 @@ class TagihanController extends Controller
 
             'user_id'=>auth()->id(),
 
-            'template_nama'=>'Reminder Tagihan',
+            'template_nama'=>'Template Reminder PLN',
 
             'isi_pesan'=>$pesan,
 
@@ -203,9 +204,9 @@ class TagihanController extends Controller
 
             'response_code'=>'200',
 
-            'response_message'=>'Dummy WhatsApp',
+            'response_message'=>'Reminder berhasil dikirim',
 
-            'keterangan'=>'Reminder berhasil dikirim'
+            'keterangan'=>'Dikirim melalui WhatsApp'
 
         ]);
         

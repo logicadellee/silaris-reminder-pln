@@ -18,18 +18,20 @@ Route::get('/', function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
+    Route::get('/pelanggan/import', [PelangganController::class, 'importForm'])
+        ->name('pelanggan.import.form');
+
+    Route::post('/pelanggan/import', [PelangganController::class, 'import'])
+        ->name('pelanggan.import');
+
     Route::resource('pelanggan', PelangganController::class);
 
     Route::resource('tagihan', TagihanController::class);
 
-    Route::get('/tagihan/{id}/reminder',
-    [TagihanController::class,'reminder'])
-    ->name('tagihan.reminder');
-
-    Route::get('/tagihan/{id}/reminder', [TagihanController::class,'reminder'])
+    Route::get('/tagihan/{id}/reminder', [TagihanController::class, 'reminder'])
         ->name('tagihan.reminder');
 
-    Route::post('/tagihan/{id}/send', [TagihanController::class,'sendReminder'])
+    Route::post('/tagihan/{id}/send', [TagihanController::class, 'sendReminder'])
         ->name('tagihan.send');
 
     Route::resource('reminder', ReminderController::class);

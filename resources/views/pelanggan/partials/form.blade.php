@@ -1,84 +1,79 @@
-@props(['pelanggan' => null])
-
-@php
-    $isEdit = $pelanggan instanceof \App\Models\Pelanggan;
-@endphp
-
-<form action="{{ $isEdit ? route('pelanggan.update', $pelanggan) : route('pelanggan.store') }}" method="POST" class="row g-3">
-    @csrf
-    @if ($isEdit)
-        @method('PUT')
-    @endif
-
+<div class="row g-3">
     <div class="col-md-6">
-        <label for="id_pelanggan" class="form-label">ID Pelanggan</label>
-        <input type="text" class="form-control @error('id_pelanggan') is-invalid @enderror" id="id_pelanggan" name="id_pelanggan" value="{{ old('id_pelanggan', $pelanggan?->id_pelanggan) }}" required>
+        <label class="form-label fw-semibold">ID Pelanggan <span class="text-danger">*</span></label>
+        <input type="text" name="id_pelanggan" class="form-control @error('id_pelanggan') is-invalid @enderror"
+            value="{{ old('id_pelanggan', $pelanggan->id_pelanggan ?? '') }}" required>
         @error('id_pelanggan')
-            <div class="invalid-feedback d-block">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 
     <div class="col-md-6">
-        <label for="nama_pelanggan" class="form-label">Nama Pelanggan</label>
-        <input type="text" class="form-control @error('nama_pelanggan') is-invalid @enderror" id="nama_pelanggan" name="nama_pelanggan" value="{{ old('nama_pelanggan', $pelanggan?->nama_pelanggan) }}" required>
+        <label class="form-label fw-semibold">Nama Pelanggan <span class="text-danger">*</span></label>
+        <input type="text" name="nama_pelanggan" class="form-control @error('nama_pelanggan') is-invalid @enderror"
+            value="{{ old('nama_pelanggan', $pelanggan->nama_pelanggan ?? '') }}" required>
         @error('nama_pelanggan')
-            <div class="invalid-feedback d-block">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 
     <div class="col-md-6">
-        <label for="nomor_whatsapp" class="form-label">Nomor WhatsApp</label>
-        <input type="text" class="form-control @error('nomor_whatsapp') is-invalid @enderror" id="nomor_whatsapp" name="nomor_whatsapp" value="{{ old('nomor_whatsapp', $pelanggan?->nomor_whatsapp) }}" placeholder="0812xxxxxxxx">
+        <label class="form-label fw-semibold">Nomor WhatsApp</label>
+        <input type="text" name="nomor_whatsapp" class="form-control @error('nomor_whatsapp') is-invalid @enderror"
+            value="{{ old('nomor_whatsapp', $pelanggan->nomor_whatsapp ?? '') }}"
+            placeholder="Contoh: 628123456789">
         @error('nomor_whatsapp')
-            <div class="invalid-feedback d-block">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 
     <div class="col-md-6">
-        <label for="tarif" class="form-label">Tarif</label>
-        <input type="text" class="form-control @error('tarif') is-invalid @enderror" id="tarif" name="tarif" value="{{ old('tarif', $pelanggan?->tarif) }}" placeholder="R1/450 VA">
+        <label class="form-label fw-semibold">Golongan Tarif</label>
+        <input type="text" name="tarif" class="form-control @error('tarif') is-invalid @enderror"
+            value="{{ old('tarif', $pelanggan->tarif ?? '') }}"
+            placeholder="Contoh: R1, R2, B1">
         @error('tarif')
-            <div class="invalid-feedback d-block">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 
-    <div class="col-md-3">
-        <label for="daya" class="form-label">Daya</label>
-        <input type="text" class="form-control @error('daya') is-invalid @enderror" id="daya" name="daya" value="{{ old('daya', $pelanggan?->daya) }}">
+    <div class="col-md-6">
+        <label class="form-label fw-semibold">Daya</label>
+        <input type="text" name="daya" class="form-control @error('daya') is-invalid @enderror"
+            value="{{ old('daya', $pelanggan->daya ?? '') }}"
+            placeholder="Contoh: 900 VA, 1300 VA">
         @error('daya')
-            <div class="invalid-feedback d-block">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 
-    <div class="col-md-3">
-        <label for="status_pelanggan" class="form-label">Status</label>
-        <select class="form-select @error('status_pelanggan') is-invalid @enderror" id="status_pelanggan" name="status_pelanggan">
-            <option value="Aktif" {{ old('status_pelanggan', $pelanggan?->status_pelanggan) === 'Aktif' ? 'selected' : '' }}>Aktif</option>
-            <option value="Tidak Aktif" {{ old('status_pelanggan', $pelanggan?->status_pelanggan) === 'Tidak Aktif' ? 'selected' : '' }}>Tidak Aktif</option>
+    <div class="col-md-6">
+        <label class="form-label fw-semibold">Peruntukan Listrik</label>
+        <input type="text" name="peruntukan_listrik" class="form-control @error('peruntukan_listrik') is-invalid @enderror"
+            value="{{ old('peruntukan_listrik', $pelanggan->peruntukan_listrik ?? '') }}"
+            placeholder="Contoh: Rumah Tangga, Bisnis">
+        @error('peruntukan_listrik')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <div class="col-md-12">
+        <label class="form-label fw-semibold">Alamat</label>
+        <textarea name="alamat" class="form-control @error('alamat') is-invalid @enderror"
+            rows="3" placeholder="Alamat lengkap pelanggan">{{ old('alamat', $pelanggan->alamat ?? '') }}</textarea>
+        @error('alamat')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label fw-semibold">Status Pelanggan <span class="text-danger">*</span></label>
+        <select name="status_pelanggan" class="form-select @error('status_pelanggan') is-invalid @enderror" required>
+            <option value="Aktif" {{ old('status_pelanggan', $pelanggan->status_pelanggan ?? 'Aktif') == 'Aktif' ? 'selected' : '' }}>Aktif</option>
+            <option value="Tidak Aktif" {{ old('status_pelanggan', $pelanggan->status_pelanggan ?? '') == 'Tidak Aktif' ? 'selected' : '' }}>Tidak Aktif</option>
         </select>
         @error('status_pelanggan')
-            <div class="invalid-feedback d-block">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
-
-    <div class="col-md-6">
-        <label for="peruntukan_listrik" class="form-label">Peruntukan Listrik</label>
-        <input type="text" class="form-control @error('peruntukan_listrik') is-invalid @enderror" id="peruntukan_listrik" name="peruntukan_listrik" value="{{ old('peruntukan_listrik', $pelanggan?->peruntukan_listrik) }}">
-        @error('peruntukan_listrik')
-            <div class="invalid-feedback d-block">{{ $message }}</div>
-        @enderror
-    </div>
-
-    <div class="col-12">
-        <label for="alamat" class="form-label">Alamat</label>
-        <textarea class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat" rows="3" required>{{ old('alamat', $pelanggan?->alamat) }}</textarea>
-        @error('alamat')
-            <div class="invalid-feedback d-block">{{ $message }}</div>
-        @enderror
-    </div>
-
-    <div class="col-12 d-flex justify-content-end gap-2">
-        <a href="{{ route('pelanggan.index') }}" class="btn btn-outline-secondary">Batal</a>
-        <button type="submit" class="btn btn-primary">{{ $isEdit ? 'Simpan Perubahan' : 'Tambah Pelanggan' }}</button>
-    </div>
-</form>
+</div>

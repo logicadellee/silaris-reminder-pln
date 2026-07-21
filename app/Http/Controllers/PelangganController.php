@@ -134,11 +134,11 @@ class PelangganController extends Controller
         $import = new PelangganImport();
         Excel::import($import, $request->file('file'));
 
+        // Jadi ini
         $msg = "Import berhasil! "
-            . "{$import->getImportedCount()} pelanggan baru ditambahkan, "
-            . "{$import->getUpdatedCount()} pelanggan diperbarui, "
-            . "{$import->getTagihanCount()} tagihan diproses.";
-
+    . "{$import->getImportedCount()} pelanggan baru ditambahkan, "
+    . "{$import->getUpdatedCount()} pelanggan diperbarui.";
+    
         return redirect()
             ->route('pelanggan.index')
             ->with('success', $msg);

@@ -1,137 +1,185 @@
 <x-app-layout>
+
     <x-slot name="header">
-        @include('components.admin.page-header', [
-            'title' => 'Dashboard',
-            'description' => 'Selamat datang di Sistem Reminder Pembayaran Tagihan Listrik (SILARIS)',
-        ])
+        <h4 class="fw-bold mb-0">
+            Dashboard SILARIS
+        </h4>
     </x-slot>
 
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-        </ol>
-    </nav>
+    <div class="container-fluid">
 
-    <div class="row g-4 mb-4">
-        @include('components.admin.summary-card', [
-            'title' => 'Total Pelanggan',
-            'value' => '0',
-            'icon' => 'people-fill',
-            'tone' => 'primary',
-        ])
+        {{-- Statistik --}}
+        <div class="row g-4 mb-4">
 
-        @include('components.admin.summary-card', [
-            'title' => 'Tagihan Aktif',
-            'value' => '0',
-            'icon' => 'receipt-cutoff',
-            'tone' => 'warning',
-        ])
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0 rounded-4">
+                    <div class="card-body">
 
-        @include('components.admin.summary-card', [
-            'title' => 'Reminder Hari Ini',
-            'value' => '0',
-            'icon' => 'whatsapp',
-            'tone' => 'success',
-        ])
+                        <small class="text-muted">
+                            Total Pelanggan
+                        </small>
 
-        @include('components.admin.summary-card', [
-            'title' => 'Berhasil Terkirim',
-            'value' => '0',
-            'icon' => 'check-circle-fill',
-            'tone' => 'info',
-        ])
-    </div>
+                        <h2 class="fw-bold text-primary mt-2">
+                            0
+                        </h2>
 
-    <div class="row g-4">
-        <div class="col-12 col-xl-8">
-            @include('components.admin.section-card', [
-                'title' => 'Statistik Reminder Bulanan',
-                'description' => 'Ringkasan data dummy pengiriman reminder per bulan.',
-            ])
-                <div class="dashboard-chart">
-                    <canvas id="monthlyReminderChart" aria-label="Statistik Reminder Bulanan"></canvas>
-                </div>
-            @endinclude
-        </div>
-
-        <div class="col-12 col-xl-4">
-            @include('components.admin.section-card', [
-                'title' => 'Aktivitas Terbaru',
-                'description' => 'Catatan aktivitas sistem yang sedang berjalan.',
-            ])
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item px-0">
-                        <div class="d-flex justify-content-between align-items-center gap-3">
-                            <span class="fw-semibold">Import Data</span>
-                            <span class="badge text-bg-secondary">Dummy</span>
-                        </div>
-                    </div>
-                    <div class="list-group-item px-0">
-                        <div class="d-flex justify-content-between align-items-center gap-3">
-                            <span class="fw-semibold">Reminder Berhasil</span>
-                            <span class="badge text-bg-success">Berhasil</span>
-                        </div>
-                    </div>
-                    <div class="list-group-item px-0">
-                        <div class="d-flex justify-content-between align-items-center gap-3">
-                            <span class="fw-semibold">Reminder Gagal</span>
-                            <span class="badge text-bg-danger">Gagal</span>
-                        </div>
-                    </div>
-                    <div class="list-group-item px-0">
-                        <div class="d-flex justify-content-between align-items-center gap-3">
-                            <span class="fw-semibold">Login Admin</span>
-                            <span class="badge text-bg-primary">Aktif</span>
-                        </div>
                     </div>
                 </div>
-            @endinclude
+            </div>
+
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0 rounded-4">
+                    <div class="card-body">
+
+                        <small class="text-muted">
+                            Tagihan Belum Bayar
+                        </small>
+
+                        <h2 class="fw-bold text-danger mt-2">
+                            0
+                        </h2>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0 rounded-4">
+                    <div class="card-body">
+
+                        <small class="text-muted">
+                            Reminder Hari Ini
+                        </small>
+
+                        <h2 class="fw-bold text-warning mt-2">
+                            0
+                        </h2>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0 rounded-4">
+                    <div class="card-body">
+
+                        <small class="text-muted">
+                            Pengiriman Berhasil
+                        </small>
+
+                        <h2 class="fw-bold text-success mt-2">
+                            0
+                        </h2>
+
+                    </div>
+                </div>
+            </div>
+
         </div>
+
+        {{-- Chart --}}
+        <div class="row">
+
+            <div class="col-lg-8">
+
+                <div class="card shadow-sm border-0 rounded-4">
+
+                    <div class="card-header bg-white fw-semibold">
+
+                        Grafik Reminder
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <canvas id="dashboardChart" height="120"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="card shadow-sm border-0 rounded-4">
+
+                    <div class="card-header bg-white fw-semibold">
+
+                        Informasi
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <ul class="list-group list-group-flush">
+
+                            <li class="list-group-item">
+                                Belum ada data.
+                            </li>
+
+                            <li class="list-group-item">
+                                Import data tagihan terlebih dahulu.
+                            </li>
+
+                            <li class="list-group-item">
+                                Reminder akan muncul di sini.
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="row g-4 mt-1">
-        <div class="col-12">
-            @include('components.admin.section-card', [
-                'title' => 'Tagihan Jatuh Tempo Terdekat',
-                'description' => 'Daftar data dummy tagihan yang akan jatuh tempo.',
-            ])
-                <div class="table-responsive">
-                    <table class="table align-middle table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th>IDPEL</th>
-                                <th>Nama Pelanggan</th>
-                                <th>Nominal</th>
-                                <th>Jatuh Tempo</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>123456789012</td>
-                                <td>Andi Prakoso</td>
-                                <td>Rp 368.000</td>
-                                <td>2026-07-15</td>
-                                <td><span class="badge text-bg-warning">Menunggu</span></td>
-                            </tr>
-                            <tr>
-                                <td>123456789013</td>
-                                <td>Rina Lestari</td>
-                                <td>Rp 415.500</td>
-                                <td>2026-07-18</td>
-                                <td><span class="badge text-bg-success">Terkirim</span></td>
-                            </tr>
-                            <tr>
-                                <td>123456789014</td>
-                                <td>Hadi Sutrisno</td>
-                                <td>Rp 289.000</td>
-                                <td>2026-07-20</td>
-                                <td><span class="badge text-bg-primary">Diproses</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            @endinclude
-        </div>
-    </div>
+    <script>
+
+        const ctx = document.getElementById('dashboardChart');
+
+        new Chart(ctx,{
+
+            type:'line',
+
+            data:{
+
+                labels:[
+                    'Sen',
+                    'Sel',
+                    'Rab',
+                    'Kam',
+                    'Jum',
+                    'Sab',
+                    'Min'
+                ],
+
+                datasets:[{
+
+                    label:'Reminder',
+
+                    data:[
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+
+                    tension:0.4
+
+                }]
+
+            }
+
+        });
+
+    </script>
+
 </x-app-layout>

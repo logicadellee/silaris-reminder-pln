@@ -50,7 +50,7 @@ ULP Way Halim
                 </div>
 
                 <form method="POST"
-                      action="{{ route('tagihan.kirim',$tagihan->id) }}">
+                        action="{{ route('tagihan.kirim',$tagihan->id) }}">
 
                     @csrf
 

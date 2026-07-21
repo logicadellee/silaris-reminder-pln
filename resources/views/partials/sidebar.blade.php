@@ -39,8 +39,8 @@
     </div>
 
     <form method="POST"
-          action="{{ route('logout') }}"
-          class="logout">
+            action="{{ route('logout') }}"
+            class="logout">
 
         @csrf
 

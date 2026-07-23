@@ -17,6 +17,7 @@ class PelangganImport implements ToCollection, WithHeadingRow
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
+
             $pelanggan = Pelanggan::updateOrCreate(
                 ['id_pelanggan' => $row['idpel']],
                 [
@@ -35,6 +36,34 @@ class PelangganImport implements ToCollection, WithHeadingRow
             } else {
                 $this->updatedCount++;
             }
+
+            Tagihan::updateOrCreate(
+                [
+                    'pelanggan_id' => $pelanggan->id,
+                    'periode' => now()->format('Y-m'),
+                ],
+                [
+                    'nominal' => 0,
+                    'jatuh_tempo' => now()->endOfMonth(),
+                    'status_pembayaran' => 'Belum Bayar',
+                    'tanggal_import' => now(),
+                    'keterangan' => null,
+                ]
+            );
+
+            Tagihan::firstOrCreate(
+                [
+                    'pelanggan_id' => $pelanggan->id,
+                ],
+                [
+                    'periode' => now()->format('Y-m'),
+                    'nominal' => 0,
+                    'jatuh_tempo' => now()->endOfMonth(),
+                    'status_pembayaran' => 'Belum Bayar',
+                    'tanggal_import' => now(),
+                    'keterangan' => null,
+                ]
+            );
         }
     }
 

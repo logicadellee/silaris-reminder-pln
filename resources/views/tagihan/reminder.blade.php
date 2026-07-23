@@ -2,6 +2,26 @@
 
 <div class="container-fluid">
 
+@foreach($tagihans as $tagihan)
+
+@php
+
+$pesan = "Yth. {$tagihan->pelanggan->nama_pelanggan},
+
+Kami mengingatkan bahwa tagihan listrik Anda dengan rincian berikut:
+
+ID Pelanggan : {$tagihan->pelanggan->id_pelanggan}
+Periode : {$tagihan->periode}
+Nominal : Rp " . number_format($tagihan->nominal,0,',','.') . "
+Jatuh Tempo : " . $tagihan->jatuh_tempo->format('d-m-Y') . "
+
+Mohon segera melakukan pembayaran sebelum jatuh tempo.
+
+Terima kasih.
+PT PLN (Persero) ULP Way Halim";
+
+@endphp
+
 <div class="row">
 
 <div class="col-lg-8">
@@ -250,5 +270,7 @@ Lunas
 </div>
 
 </div>
+
+@endforeach
 
 </x-app-layout>

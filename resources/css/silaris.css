@@ -14,7 +14,7 @@ body{
 /* Layout */
 
 .app-sidebar{
-    width:250px;
+    flex:0 0 240px;
     background:#fff;
 }
 
@@ -25,14 +25,10 @@ body{
 }
 
 .app-content{
-    margin-left:260px;
-
+    flex:1;
     min-height:100vh;
-
-    background:var(--bg);
-
+    background:#f5f7fb;
     display:flex;
-
     flex-direction:column;
 }
 
@@ -50,6 +46,7 @@ body{
     border:none;
     border-radius:18px;
     box-shadow:0 8px 20px rgba(0,0,0,.05);
+    width:100%;
 }
 
 /* Button */
@@ -86,17 +83,11 @@ body{
 }
 
 .table-responsive{
-
-max-height:600px;
-
-overflow:auto;
-
+    overflow-x:auto;
 }
 
 .card{
-
-overflow:hidden;
-
+    overflow:visible;
 }
 
 /* Statistic */
@@ -324,4 +315,110 @@ z-index:1000;
 .page-header p{
     margin-bottom:0;
     color:#6c757d;
+}
+
+.filter-action{
+    display:flex;
+    align-items:end;
+}
+
+.filter-action .btn{
+    height:46px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    border-radius:12px;
+    white-space:nowrap;
+}
+
+.filter-card{
+    border-radius:18px;
+}
+
+.filter-card .btn{
+    height:48px;
+    border-radius:12px;
+}
+
+.filter-card .form-control,
+.filter-card .form-select{
+    height:48px;
+}
+
+.btn-search{
+    min-width:110px;
+}
+
+.btn-reset{
+    width:46px;
+    padding:0;
+}
+
+.btn-reminder{
+    min-width:210px;
+}
+
+.table thead th{
+
+    vertical-align:middle;
+
+    padding:16px 14px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.table tbody td{
+
+    padding:14px;
+
+    vertical-align:middle;
+
+}
+
+.badge{
+
+    padding:8px 12px;
+
+    border-radius:30px;
+
+    font-size:12px;
+
+}
+
+.table thead th{
+
+    background:#212529;
+
+    color:white;
+
+    vertical-align:middle;
+
+    text-align:center;
+
+}
+
+.table td{
+
+    vertical-align:middle;
+
+}
+
+.badge{
+
+    border-radius:20px;
+
+    padding:8px 12px;
+
+}
+
+.btn-sm{
+
+    border-radius:30px;
+
+    padding:6px 16px;
+
 }

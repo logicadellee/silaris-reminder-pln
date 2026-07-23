@@ -226,4 +226,19 @@ class TagihanController extends Controller
             ->route('tagihan.index')
             ->with('success', 'Data tagihan berhasil dihapus.');
     }
+
+        public function sendBulkReminder(Request $request)
+        {
+
+        $request->validate([
+        'tagihan' => 'required|array'
+        ]);
+
+        $tagihans = Tagihan::with('pelanggan')
+            ->whereIn('id', $request->tagihan)
+            ->get();
+
+        return view('tagihan.preview', compact('tagihans'));
+        
+        }
 }

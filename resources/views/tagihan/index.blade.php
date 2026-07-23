@@ -141,133 +141,114 @@
 
         {{-- Filter --}}
 
-        <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card shadow-sm border-0 rounded-4 mb-4">
 
-            <div class="card-body">
+    <div class="card-body">
 
-            <h5 class="fw-bold text-primary mb-4">
-
+        <h5 class="fw-bold text-primary mb-4">
             <i class="bi bi-funnel-fill"></i>
-
             Filter Data
+        </h5>
 
-            </h5>
+        <form action="{{ route('tagihan.index') }}" method="GET">
 
-                <form
-                    method="GET"
-                    action="{{ route('tagihan.index') }}">
+            <div class="row">
 
-                    <div class="row g-3">
+                <div class="col-md-4">
 
-                        <div class="col-lg-4">
+                    <label>Cari Pelanggan</label>
 
-                            <label class="form-label">
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="search"
+                        placeholder="ID Pelanggan / Nama Pelanggan">
 
-                                Cari Pelanggan
+                </div>
 
-                            </label>
+                <div class="col-md-3">
 
-                            <input
-                                type="text"
-                                name="search"
-                                value="{{ request('search') }}"
-                                class="form-control"
-                                placeholder="ID Pelanggan / Nama Pelanggan">
+                    <label>Status</label>
 
-                        </div>
+                    <select
+                        class="form-select"
+                        name="status">
 
-                        <div class="col-lg-3">
+                        <option value="">Semua Status</option>
+                        <option>Belum Bayar</option>
+                        <option>Lunas</option>
 
-                            <label class="form-label">
+                    </select>
 
-                                Status
+                </div>
 
-                            </label>
+                <div class="col-md-3">
 
-                            <select
-                                name="status"
-                                class="form-select">
+                    <label>Periode</label>
 
-                                <option value="">Semua Status</option>
+                    <input
+                        type="month"
+                        class="form-control"
+                        name="periode">
 
-                                <option value="Belum Bayar"
-                                {{ request('status')=='Belum Bayar' ? 'selected' : '' }}>
+                </div>
 
-                                Belum Bayar
+                <div class="col-md-2">
 
-                                </option>
+                    <label>&nbsp;</label>
 
-                                <option value="Lunas"
-                                {{ request('status')=='Lunas' ? 'selected' : '' }}>
+                    <div class="d-grid gap-2">
 
-                                Lunas
+                        <button class="btn btn-primary">
 
-                                </option>
+                            <i class="bi bi-search"></i>
 
-                            </select>
+                            Cari
 
-                        </div>
+                        </button>
 
-                        <div class="col-lg-3">
+                        <button
+                            type="button"
+                            id="btnBulkReminder"
+                            class="btn btn-success">
 
-                            <label class="form-label">
+                            <i class="bi bi-whatsapp"></i>
 
-                                Periode
+                            Kirim Reminder
 
-                            </label>
+                        </button>
 
-                            <input
-                                type="month"
-                                name="periode"
-                                value="{{ request('periode') }}"
-                                class="form-control">
+                        <a
+                            href="{{ route('tagihan.index') }}"
+                            class="btn btn-outline-secondary">
 
-                        </div>
+                            Reset
 
-                        <div class="col-lg-2 d-grid">
-
-                            <label class="form-label text-white">
-        .
-                            </label>
-
-                            <div class="d-flex gap-2">
-
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary flex-fill">
-
-                                    <i class="bi bi-search"></i>
-
-                                    Cari
-
-                                </button>
-
-                                <a href="{{ route('tagihan.index') }}"
-                                    class="btn btn-outline-secondary">
-
-                                    <i class="bi bi-arrow-clockwise"></i>
-
-                                </a>
-
-                            </div>
-
-                        </div>
+                        </a>
 
                     </div>
 
-                </form>
-
-                <hr>
+                </div>
 
             </div>
 
-        </div>
+        </form>
+
+    </div>
+
+</div>
 
         {{-- Tabel --}}
 
+        <form
+        action="{{ route('tagihan.send.bulk') }}"
+        method="POST">
+
+        @csrf
+
         <div class="card border-0 shadow-sm">
 
-    <div class="card-header bg-white">
+        <div class="card-header bg-white">
 
         <h5 class="mb-0 fw-semibold">
 
@@ -279,12 +260,18 @@
 
     <div class="table-responsive">
 
-        <table class="table table-hover align-middle mb-0">
+        <table class="table table-hover align-middle text-nowrap mb-0">
 
-            <thead class="table-dark">
+            <thead class="table-dark align-middle">
 
                 <tr>
 
+                    <th width="40">
+                    <input
+                        type="checkbox"
+                        id="checkAll"
+                        class="form-check-input">
+                    </th>
                     <th>No</th>
                     <th>ID Pelanggan</th>
                     <th>Nama Pelanggan</th>
@@ -292,7 +279,7 @@
                     <th>Nominal</th>
                     <th>Jatuh Tempo</th>
                     <th>Status</th>
-                    <th width="220">Aksi</th>
+                    <!-- <th width="220">Aksi</th> -->
 
                 </tr>
 
@@ -307,6 +294,12 @@
                     <td>
 
                         {{ $loop->iteration }}
+
+                        <input
+                            type="checkbox"
+                            class="form-check-input check-item"
+                            name="tagihan[]"
+                            value="{{ $tagihan->id }}">
 
                     </td>
 
@@ -364,7 +357,7 @@
 
                     <td>
 
-                        <div class="d-flex gap-1">
+                        <div class="d-flex gap-2 justify-content-center">
 
                             <a
                                 href="{{ route('tagihan.show',$tagihan->id) }}"
@@ -380,7 +373,7 @@
 
                                 <a
                                     href="{{ route('tagihan.reminder',$tagihan->id) }}"
-                                    class="btn btn-success btn-sm rounded-pill px-3"
+                                    class="btn btn-success btn-sm rounded-pill"
 
                                     <i class="bi bi-whatsapp"></i>
 
@@ -419,8 +412,62 @@
 
         </table>
 
+        </form>
+
     </div>
 
 </div>
+
+<script>
+
+document.getElementById('btnBulkReminder').addEventListener('click', function () {
+
+    let checked = document.querySelectorAll('.check-item:checked');
+
+    if (checked.length === 0) {
+
+        alert('Pilih minimal satu tagihan.');
+
+        return;
+    }
+
+    let form = document.createElement('form');
+
+    form.method = 'POST';
+
+    form.action = "{{ route('tagihan.send.bulk') }}";
+
+    // CSRF
+    let token = document.createElement('input');
+
+    token.type = 'hidden';
+
+    token.name = '_token';
+
+    token.value = "{{ csrf_token() }}";
+
+    form.appendChild(token);
+
+    checked.forEach(function(item){
+
+        let input = document.createElement('input');
+
+        input.type = 'hidden';
+
+        input.name = 'tagihan[]';
+
+        input.value = item.value;
+
+        form.appendChild(input);
+
+    });
+
+    document.body.appendChild(form);
+
+    form.submit();
+
+});
+
+</script>
 
 </x-app-layout>

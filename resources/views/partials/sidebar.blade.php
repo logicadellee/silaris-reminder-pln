@@ -13,25 +13,25 @@
     <div class="menu">
 
         <a href="{{ route('dashboard') }}"
-           class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+            class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <i class="bi bi-house-door"></i>
             Dashboard
         </a>
 
         <a href="{{ route('pelanggan.index') }}"
-           class="{{ request()->routeIs('pelanggan.*') ? 'active' : '' }}">
+            class="{{ request()->routeIs('pelanggan.*') ? 'active' : '' }}">
             <i class="bi bi-people"></i>
             Master Pelanggan
         </a>
 
         <a href="{{ route('tagihan.index') }}"
-           class="{{ request()->routeIs('tagihan.*') ? 'active' : '' }}">
+            class="{{ request()->routeIs('tagihan.*') ? 'active' : '' }}">
             <i class="bi bi-file-earmark-text"></i>
             Tagihan
         </a>
 
         <a href="{{ route('riwayat.index') }}"
-           class="{{ request()->routeIs('riwayat.*') ? 'active' : '' }}">
+            class="{{ request()->routeIs('riwayat.*') ? 'active' : '' }}">
             <i class="bi bi-send"></i>
             Riwayat Pengiriman
         </a>

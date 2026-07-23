@@ -42,6 +42,9 @@ Route::get('/', function () {
     [TagihanController::class,'sendReminder'])
     ->name('tagihan.send');
 
+    Route::post('/tagihan/send-bulk', [TagihanController::class, 'sendBulkReminder'])
+    ->name('tagihan.send.bulk');
+
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
 

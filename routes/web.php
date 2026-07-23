@@ -13,10 +13,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::middleware(['auth', 'verified'])->group(function () {
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware('auth')
+    ->name('dashboard');
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('dashboard');
+Route::middleware(['auth'])->group(function () {
 
     Route::get('/pelanggan/import', [PelangganController::class, 'importForm'])
         ->name('pelanggan.import.form');
@@ -38,10 +39,6 @@ Route::get('/', function () {
 
     Route::resource('riwayat', RiwayatController::class);
 
-    Route::post('/tagihan/{id}/send',
-    [TagihanController::class,'sendReminder'])
-    ->name('tagihan.send');
-
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
 
@@ -50,7 +47,6 @@ Route::get('/', function () {
 
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
-
-// });
+});
 
 require __DIR__.'/auth.php';

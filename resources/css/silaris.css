@@ -9,9 +9,13 @@ body{
     font-family:'Poppins',sans-serif;
     background:var(--bg);
     color:#1f2937;
+    margin:0;
+    padding:0;
 }
 
-/* Layout */
+/* ===========================
+   Layout
+=========================== */
 
 .app-sidebar{
     width:250px;
@@ -22,37 +26,39 @@ body{
     height:70px;
     background:#fff;
     box-shadow:0 2px 10px rgba(0,0,0,.06);
+    position:sticky;
+    top:0;
+    z-index:1000;
 }
 
 .app-content{
     margin-left:260px;
-
     min-height:100vh;
-
     background:var(--bg);
-
     display:flex;
-
     flex-direction:column;
 }
 
 .app-footer{
     margin-top:auto;
-
     background:#fff;
-
     height:55px;
 }
 
-/* Card */
+/* ===========================
+   Card
+=========================== */
 
 .card{
     border:none;
     border-radius:18px;
     box-shadow:0 8px 20px rgba(0,0,0,.05);
+    overflow:hidden;
 }
 
-/* Button */
+/* ===========================
+   Button
+=========================== */
 
 .btn-primary{
     background:var(--pln-blue);
@@ -68,13 +74,19 @@ body{
     border:none;
 }
 
-/* Form */
+/* ===========================
+   Form
+=========================== */
 
 .form-control,
 .form-select{
     border-radius:12px;
     height:46px;
 }
+
+/* ===========================
+   Table
+=========================== */
 
 .table{
     margin-bottom:0;
@@ -86,20 +98,13 @@ body{
 }
 
 .table-responsive{
-
-max-height:600px;
-
-overflow:auto;
-
+    max-height:600px;
+    overflow:auto;
 }
 
-.card{
-
-overflow:hidden;
-
-}
-
-/* Statistic */
+/* ===========================
+   Statistic
+=========================== */
 
 .stat-card{
     border-radius:18px;
@@ -144,85 +149,73 @@ overflow:hidden;
     font-size:28px;
 }
 
-/* Empty */
+/* ===========================
+   Empty State
+=========================== */
 
 .empty-state{
     padding:60px;
     text-align:center;
 }
 
+/* ===========================
+   Sidebar
+=========================== */
+
 .sidebar{
-
     width:260px;
-
     height:100vh;
-
-    min-height:100vh;
-
+    position:fixed;
+    top:0;
+    left:0;
     background:#0057B8;
 
     display:flex;
-
     flex-direction:column;
 
-    position:fixed;
+    overflow:hidden;
 
-    left:0;
-
-    top:0;
-
+    z-index:100;
 }
 
 .sidebar-header{
-
     text-align:center;
-
     padding:35px 20px;
-
     color:#fff;
 
+    position:relative;
+    z-index:2;
 }
 
 .logo-pln{
-
     width:72px;
-
     margin-bottom:18px;
-
 }
 
 .sidebar-header h3{
-
     font-size:30px;
-
     font-weight:700;
-
     margin-bottom:5px;
-
 }
 
 .sidebar-header small{
-
     color:#dfefff;
-
 }
 
 .menu{
-
     padding:20px;
 
     display:flex;
-
     flex-direction:column;
 
     gap:10px;
 
+    position:relative;
+    z-index:2;
 }
 
 .menu a{
-
-    color:white;
-
+    color:#fff;
     text-decoration:none;
 
     padding:14px 18px;
@@ -232,84 +225,84 @@ overflow:hidden;
     font-weight:500;
 
     display:flex;
-
     align-items:center;
 
     gap:12px;
 
     transition:.2s;
-
 }
 
 .menu a:hover{
-
     background:rgba(255,255,255,.1);
-
 }
 
 .menu a.active{
-
-    background:white;
-
+    background:#fff;
     color:#0057B8;
-
     font-weight:600;
-
 }
 
-.logout{
+/* ===========================
+   Logout
+=========================== */
 
+.logout{
     margin:auto 20px 30px;
 
+    position:relative;
+
+    z-index:2;
 }
 
 .logout button{
-
     width:100%;
-
     height:50px;
 
     border:none;
 
     border-radius:12px;
 
-    background:white;
+    background:#fff;
 
     color:#0057B8;
 
     font-weight:600;
 
+    cursor:pointer;
+
+    transition:.2s;
 }
 
-.sidebar-bg{
+.logout button:hover{
+    background:#f5f5f5;
+}
 
+/* ===========================
+   Sidebar Background
+=========================== */
+
+.sidebar-bg{
     position:absolute;
 
+    left:0;
     bottom:0;
 
-    left:0;
-
     width:100%;
-
     height:180px;
 
     background:url('/images/sidebar-pln.png') bottom center no-repeat;
-
     background-size:cover;
 
     opacity:.35;
 
+    pointer-events:none;
+
+    z-index:1;
 }
 
-.app-navbar{
-
-position:sticky;
-
-top:0;
-
-z-index:1000;
-
-}
+/* ===========================
+   Page Header
+=========================== */
 
 .page-header{
     margin-bottom:32px;

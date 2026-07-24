@@ -6,6 +6,7 @@ use App\Models\Pelanggan;
 use App\Models\Tagihan;
 use Illuminate\Http\Request;
 use App\Models\RiwayatPengiriman;
+use Illuminate\Support\Facades\Http;
 
 class TagihanController extends Controller
 {
@@ -14,6 +15,26 @@ class TagihanController extends Controller
      */
     public function index(Request $request)
     {
+        $periode = now()->format('Y-m');
+
+        $pelanggans = Pelanggan::all();
+
+        foreach ($pelanggans as $pelanggan) {
+
+            Tagihan::firstOrCreate(
+                [
+                    'pelanggan_id' => $pelanggan->id,
+                    'periode' => $periode,
+                ],
+                [
+                    'nominal' => 0,
+                    'jatuh_tempo' => now()->endOfMonth(),
+                    'status_pembayaran' => 'Belum Bayar',
+                    'tanggal_import' => now(),
+                ]
+            );
+
+        }
         $query = Tagihan::with('pelanggan');
 
         if ($request->filled('periode')) {
@@ -156,64 +177,67 @@ class TagihanController extends Controller
     }
 
     public function sendReminder($id)
-    {
-        $tagihan = Tagihan::with('pelanggan')->findOrFail($id);
+{
+    $tagihan = Tagihan::with('pelanggan')->findOrFail($id);
 
-        $nomor = $tagihan->pelanggan->nomor_whatsapp;
+    $nomor = $tagihan->pelanggan->nomor_whatsapp;
 
-        // Hilangkan karakter selain angka
-        if (empty($tagihan->pelanggan->nomor_whatsapp)) {
+    // ubah 08 menjadi 628
+    if (substr($nomor, 0, 1) == "0") {
+        $nomor = "62" . substr($nomor, 1);
+    }
 
-        return back()->with(
-            'error',
-            'Nomor WhatsApp pelanggan belum diisi.'
-        );
-}
+    $pesan = "Yth. {$tagihan->pelanggan->nama_pelanggan}\n\n";
+    $pesan .= "Kami mengingatkan bahwa tagihan listrik Anda.\n\n";
+    $pesan .= "Periode : {$tagihan->periode}\n";
+    $pesan .= "Nominal : Rp " . number_format($tagihan->nominal,0,',','.') . "\n";
+    $pesan .= "Jatuh Tempo : ".$tagihan->jatuh_tempo->format('d/m/Y')."\n\n";
+    $pesan .= "Mohon segera melakukan pembayaran.\n";
+    $pesan .= "Terima kasih.\n";
+    $pesan .= "PT PLN (Persero) ULP Way Halim";
 
-        // Ubah 08xxxx menjadi 628xxxx
-        if (substr($nomor, 0, 1) == "0") {
-            $nomor = "62" . substr($nomor, 1);
-        }
+    $response = Http::withHeaders([
+        'Authorization' => env('FONNTE_TOKEN'),
+    ])->post('https://api.fonnte.com/send',[
+        'target' => $nomor,
+        'message' => $pesan,
+    ]);
 
-        $pesan = "Yth. {$tagihan->pelanggan->nama_pelanggan},\n\n";
-        $pesan .= "Tagihan listrik Anda belum dibayar.\n\n";
-        $pesan .= "ID Pelanggan : {$tagihan->pelanggan->id_pelanggan}\n";
-        $pesan .= "Periode : {$tagihan->periode}\n";
-        $pesan .= "Nominal : Rp " . number_format($tagihan->nominal,0,',','.') . "\n";
-        $pesan .= "Jatuh Tempo : " . $tagihan->jatuh_tempo->format('d-m-Y') . "\n\n";
-        $pesan .= "Silakan segera melakukan pembayaran.\n";
-        $pesan .= "Terima kasih.\n";
-        $pesan .= "PT PLN (Persero) ULP Way Halim";
-
+    if($response->successful()){
 
         RiwayatPengiriman::create([
-
             'pelanggan_id'=>$tagihan->pelanggan_id,
-
             'tagihan_id'=>$tagihan->id,
-
             'user_id'=>auth()->id(),
-
-            'template_nama'=>'Template Reminder PLN',
-
+            'template_nama'=>'Reminder PLN',
             'isi_pesan'=>$pesan,
-
             'status_pengiriman'=>'Berhasil',
-
             'waktu_kirim'=>now(),
-
-            'response_code'=>'200',
-
-            'response_message'=>'Reminder berhasil dikirim',
-
-            'keterangan'=>'Dikirim melalui WhatsApp'
-
+            'response_code'=>$response->status(),
+            'response_message'=>'Berhasil dikirim',
+            'keterangan'=>'Fonnte'
         ]);
-        
-        return redirect(
-            "https://wa.me/$nomor?text=" . urlencode($pesan)
-        );
+
+        return redirect()
+        ->route('tagihan.index')
+        ->with('error','Gagal mengirim reminder.');
     }
+
+    RiwayatPengiriman::create([
+        'pelanggan_id'=>$tagihan->pelanggan_id,
+        'tagihan_id'=>$tagihan->id,
+        'user_id'=>auth()->id(),
+        'template_nama'=>'Reminder PLN',
+        'isi_pesan'=>$pesan,
+        'status_pengiriman'=>'Gagal',
+        'waktu_kirim'=>now(),
+        'response_code'=>$response->status(),
+        'response_message'=>$response->body(),
+        'keterangan'=>'Fonnte'
+    ]);
+
+    return back()->with('error','Gagal mengirim reminder.');
+}
 
     /**
      * Remove the specified resource from storage.

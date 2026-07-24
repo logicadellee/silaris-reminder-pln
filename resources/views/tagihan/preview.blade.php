@@ -13,11 +13,8 @@
             <div class="card-header bg-success text-white">
 
                 <h4 class="mb-0">
-
                     <i class="bi bi-whatsapp"></i>
-
                     Preview Reminder ({{ $tagihans->count() }} Pelanggan)
-
                 </h4>
 
             </div>
@@ -26,9 +23,9 @@
 
                 @foreach($tagihans as $tagihan)
 
-                @php
+                    @php
 
-                    $pesan = "Yth. {$tagihan->pelanggan->nama_pelanggan},
+                        $pesan = "Yth. {$tagihan->pelanggan->nama_pelanggan},
 
 Kami mengingatkan bahwa tagihan listrik Anda dengan rincian berikut:
 
@@ -43,91 +40,94 @@ Terima kasih.
 
 PT PLN (Persero) ULP Way Halim";
 
-                @endphp
+                    @endphp
 
-                <div class="card border mb-4">
+                    <div class="card border mb-4">
 
-                    <div class="card-header bg-light">
+                        <div class="card-header bg-light">
 
-                        <strong>
+                            <strong>
+                                {{ $tagihan->pelanggan->nama_pelanggan }}
+                            </strong>
 
-                            {{ $tagihan->pelanggan->nama_pelanggan }}
+                            <span class="text-muted">
+                                ({{ $tagihan->pelanggan->id_pelanggan }})
+                            </span>
 
-                        </strong>
+                        </div>
 
-                        <span class="text-muted">
+                        <div class="card-body">
 
-                            ({{ $tagihan->pelanggan->id_pelanggan }})
+                            <table class="table table-borderless">
 
-                        </span>
+                                <tr>
+                                    <th width="180">Nomor WA</th>
+                                    <td>{{ $tagihan->pelanggan->nomor_whatsapp }}</td>
+                                </tr>
 
-                    </div>
+                                <tr>
+                                    <th>Periode</th>
+                                    <td>{{ $tagihan->periode }}</td>
+                                </tr>
 
-                    <div class="card-body">
+                                <tr>
+                                    <th>Nominal</th>
+                                    <td>Rp {{ number_format($tagihan->nominal,0,',','.') }}</td>
+                                </tr>
 
-                        <table class="table table-borderless">
+                                <tr>
+                                    <th>Jatuh Tempo</th>
+                                    <td>{{ $tagihan->jatuh_tempo->format('d F Y') }}</td>
+                                </tr>
 
-                            <tr>
-                                <th width="180">Nomor WA</th>
-                                <td>{{ $tagihan->pelanggan->nomor_whatsapp }}</td>
-                            </tr>
+                            </table>
 
-                            <tr>
-                                <th>Periode</th>
-                                <td>{{ $tagihan->periode }}</td>
-                            </tr>
+                            <hr>
 
-                            <tr>
-                                <th>Nominal</th>
-                                <td>Rp {{ number_format($tagihan->nominal,0,',','.') }}</td>
-                            </tr>
+                            <h6 class="fw-bold">
+                                Preview Pesan
+                            </h6>
 
-                            <tr>
-                                <th>Jatuh Tempo</th>
-                                <td>{{ $tagihan->jatuh_tempo->format('d F Y') }}</td>
-                            </tr>
+                            <div style="background:#e5ddd5;padding:20px;border-radius:15px;">
 
-                        </table>
+                                <div style="background:white;padding:18px;border-radius:12px;white-space:pre-line;">
 
-                        <hr>
+                                    {{ $pesan }}
 
-                        <h6 class="fw-bold">
-
-                            Preview Pesan
-
-                        </h6>
-
-                        <div
-                            style="
-                            background:#e5ddd5;
-                            padding:20px;
-                            border-radius:15px;">
-
-                            <div
-                                style="
-                                background:white;
-                                padding:18px;
-                                border-radius:12px;
-                                white-space:pre-line;">
-
-                                {{ $pesan }}
+                                </div>
 
                             </div>
+
+                            <hr>
+
+                            <form action="{{ route('tagihan.send',$tagihan->id) }}"
+                                method="POST">
+
+                                @csrf
+
+                                <button type="submit"
+                                    class="btn btn-success w-100">
+
+                                    <i class="bi bi-whatsapp"></i>
+
+                                    Kirim WhatsApp ke
+                                    {{ $tagihan->pelanggan->nama_pelanggan }}
+
+                                </button>
+
+                            </form>
 
                         </div>
 
                     </div>
 
-                </div>
-
                 @endforeach
 
             </div>
 
-            <div class="card-footer d-flex justify-content-between">
+            <div class="card-footer">
 
-                <a
-                    href="{{ route('tagihan.index') }}"
+                <a href="{{ route('tagihan.index') }}"
                     class="btn btn-secondary">
 
                     <i class="bi bi-arrow-left"></i>
@@ -135,16 +135,6 @@ PT PLN (Persero) ULP Way Halim";
                     Kembali
 
                 </a>
-
-                <button
-                    class="btn btn-success"
-                    disabled>
-
-                    <i class="bi bi-whatsapp"></i>
-
-                    Kirim Semua Reminder
-
-                </button>
 
             </div>
 

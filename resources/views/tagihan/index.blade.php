@@ -207,16 +207,25 @@
 
                         </button>
 
-                        <button
-                            type="button"
-                            id="btnBulkReminder"
-                            class="btn btn-success">
+                        <a href="{{ route('tagihan.index') }}"
+                            class="btn btn-outline-secondary">
 
-                            <i class="bi bi-whatsapp"></i>
+                                <i class="bi bi-arrow-clockwise"></i>
 
-                            Kirim Reminder
+                            </a>
 
-                        </button>
+                            <button
+                                type="button"
+                                id="btnBulkReminder"
+                                class="btn btn-success">
+
+                                <i class="bi bi-whatsapp"></i>
+
+                                Kirim Reminder
+
+                            </button>
+
+                        </div>
 
                         <a
                             href="{{ route('tagihan.index') }}"
@@ -359,28 +368,23 @@
 
                         <div class="d-flex gap-2 justify-content-center">
 
-                            <a
-                                href="{{ route('tagihan.show',$tagihan->id) }}"
-                                class="btn btn-primary btn-sm rounded-pill px-3"
-
+                            <button
+                                type="button"
+                                class="btn btn-primary btn-sm btn-detail"
+                                data-id="{{ $tagihan->id }}">
                                 <i class="bi bi-eye"></i>
-
                                 Detail
-
-                            </a>
+                            </button>
 
                             @if($tagihan->status_pembayaran == 'Belum Bayar')
 
-                                <a
-                                    href="{{ route('tagihan.reminder',$tagihan->id) }}"
-                                    class="btn btn-success btn-sm rounded-pill"
+                                <a href="{{ route('tagihan.reminder',$tagihan->id) }}"
+                                    class="btn btn-success btn-sm rounded-pill">
 
-                                    <i class="bi bi-whatsapp"></i>
+                                        <i class="bi bi-whatsapp"></i>
+                                        Reminder
 
-                                    Reminder
-
-                                </a>
-
+                                    </a>
                             @endif
 
                         </div>
@@ -465,6 +469,194 @@ document.getElementById('btnBulkReminder').addEventListener('click', function ()
     document.body.appendChild(form);
 
     form.submit();
+
+});
+
+</script>
+
+<script>
+document.querySelectorAll('.btn-detail').forEach(function(btn){
+
+    btn.addEventListener('click', function(){
+
+        let id = this.dataset.id;
+
+        fetch('/tagihan/' + id)
+        .then(response => response.json())
+        .then(data => {
+
+            document.getElementById('d_idpel').textContent =
+                data.pelanggan.id_pelanggan;
+
+            document.getElementById('d_nama').textContent =
+                data.pelanggan.nama_pelanggan;
+
+            document.getElementById('d_wa').textContent =
+                data.pelanggan.nomor_whatsapp ?? '-';
+
+            document.getElementById('d_alamat').textContent =
+                data.pelanggan.alamat ?? '-';
+
+            document.getElementById('d_periode').textContent =
+                data.periode;
+
+            document.getElementById('d_nominal').textContent =
+                "Rp " + Number(data.nominal).toLocaleString('id-ID');
+
+            document.getElementById('d_jatuh').textContent =
+                new Date(data.jatuh_tempo).toLocaleDateString('id-ID');
+
+            document.getElementById('d_status').textContent =
+                data.status_pembayaran;
+
+            let modal = new bootstrap.Modal(document.getElementById('detailModal'));
+            modal.show();
+
+        })
+        .catch(error => {
+            console.error(error);
+            alert('Gagal mengambil data.');
+        });
+
+    });
+
+});
+</script>
+
+<div class="modal fade"
+    id="detailModal"
+    tabindex="-1">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content border-0 shadow">
+
+            <div class="modal-header bg-primary text-white">
+
+                <h5 class="modal-title">
+
+                    Detail Tagihan
+
+                </h5>
+
+                <button
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <strong>ID Pelanggan</strong>
+                        <p id="d_idpel"></p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <strong>Nama Pelanggan</strong>
+                        <p id="d_nama"></p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <strong>WhatsApp</strong>
+                        <p id="d_wa"></p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <strong>Alamat</strong>
+                        <p id="d_alamat"></p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <strong>Periode</strong>
+                        <p id="d_periode"></p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <strong>Nominal</strong>
+                        <p id="d_nominal"></p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <strong>Jatuh Tempo</strong>
+                        <p id="d_jatuh"></p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <strong>Status</strong>
+                        <p id="d_status"></p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+
+                    Tutup
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+document.querySelectorAll('.btn-detail').forEach(btn=>{
+
+    btn.addEventListener('click',function(){
+
+        let id=this.dataset.id;
+
+        fetch('/tagihan/'+id)
+
+        .then(res=>res.json())
+
+        .then(data=>{
+
+            document.getElementById('d_idpel').innerHTML =
+            data.pelanggan.id_pelanggan;
+
+            document.getElementById('d_nama').innerHTML =
+            data.pelanggan.nama_pelanggan;
+
+            document.getElementById('d_wa').innerHTML =
+            data.pelanggan.nomor_whatsapp;
+
+            document.getElementById('d_alamat').innerHTML =
+            data.pelanggan.alamat;
+
+            document.getElementById('d_periode').innerHTML =
+            data.periode;
+
+            document.getElementById('d_nominal').innerHTML =
+            "Rp "+Number(data.nominal).toLocaleString('id-ID');
+
+            document.getElementById('d_jatuh').innerHTML =
+            new Date(data.jatuh_tempo).toLocaleDateString('id-ID');
+
+            document.getElementById('d_status').innerHTML =
+            data.status_pembayaran;
+
+            new bootstrap.Modal(
+                document.getElementById('detailModal')
+            ).show();
+
+        });
+
+    });
 
 });
 

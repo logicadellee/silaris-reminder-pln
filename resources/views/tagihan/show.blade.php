@@ -89,24 +89,28 @@
             <div class="card-footer d-flex justify-content-between">
 
                 <a href="{{ route('tagihan.index') }}"
-                    class="btn btn-secondary">
+                class="btn btn-secondary">
 
                     <i class="bi bi-arrow-left"></i>
+
                     Kembali
 
                 </a>
 
-                @if($tagihan->status_pembayaran == 'Belum Bayar')
+                <form action="{{ route('tagihan.send',$tagihan->id) }}"
+                    method="POST">
 
-                    <a href="{{ route('tagihan.reminder',$tagihan->id) }}"
-                        class="btn btn-success">
+                    @csrf
+
+                    <button class="btn btn-success">
 
                         <i class="bi bi-whatsapp"></i>
+
                         Kirim Reminder
 
-                    </a>
+                    </button>
 
-                @endif
+                </form>
 
             </div>
 

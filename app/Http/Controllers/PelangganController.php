@@ -2,145 +2,79 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Pelanggan;
 use App\Models\Tagihan;
-use App\Imports\PelangganImport;
-use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Request;
 
 class PelangganController extends Controller
 {
-    /**
-     * Menampilkan daftar pelanggan dengan fitur pencarian.
-     */
-    public function index(Request $request)
+    public function index()
     {
-        $search = $request->get('search');
+        $pelanggans = Pelanggan::latest()->paginate(10);
 
-        $pelanggans = Pelanggan::when($search, function ($query) use ($search) {
-                $query->where('nama_pelanggan', 'like', '%' . $search . '%')
-                      ->orWhere('id_pelanggan', 'like', '%' . $search . '%')
-                      ->orWhere('nomor_whatsapp', 'like', '%' . $search . '%');
-            })
-            ->latest()
-            ->paginate(15);
-
-        return view('pelanggan.index', compact('pelanggans', 'search'));
+        return view('pelanggan.index', compact('pelanggans'));
     }
 
-    /**
-     * Form tambah pelanggan manual.
-     */
     public function create()
     {
         return view('pelanggan.create');
     }
 
-    /**
-     * Simpan pelanggan baru.
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'id_pelanggan'       => 'required|unique:pelanggans,id_pelanggan',
-            'nama_pelanggan'     => 'required',
-            'nomor_whatsapp'     => 'nullable',
-            'tarif'              => 'nullable',
-            'daya'               => 'nullable',
-            'alamat'             => 'nullable',
-            'peruntukan_listrik' => 'nullable',
-            'status_pelanggan'   => 'required',
+            'id_pelanggan' => 'required|unique:pelanggans,id_pelanggan',
+            'nama_pelanggan' => 'required',
         ]);
 
-        Pelanggan::create($request->all());
+        $pelanggan = Pelanggan::create($request->all());
+
+        Tagihan::create([
+            'pelanggan_id' => $pelanggan->id,
+            'periode' => now()->format('Y-m'),
+            'nominal' => 0,
+            'jatuh_tempo' => now()->endOfMonth(),
+            'status_pembayaran' => 'Belum Bayar',
+            'tanggal_import' => now(),
+        ]);
 
         return redirect()
             ->route('pelanggan.index')
-            ->with('success', 'Data pelanggan berhasil ditambahkan.');
+            ->with('success', 'Data pelanggan berhasil ditambahkan');
     }
 
-    /**
-     * Lihat profil detail pelanggan beserta riwayat tagihan.
-     */
-    public function show(Pelanggan $pelanggan)
-    {
-        $tagihans = Tagihan::where('pelanggan_id', $pelanggan->id)
-            ->orderBy('periode', 'desc')
-            ->get();
-
-        return view('pelanggan.show', compact('pelanggan', 'tagihans'));
-    }
-
-    /**
-     * Form edit pelanggan.
-     */
     public function edit(Pelanggan $pelanggan)
     {
         return view('pelanggan.edit', compact('pelanggan'));
     }
 
-    /**
-     * Update data pelanggan.
-     */
     public function update(Request $request, Pelanggan $pelanggan)
     {
         $request->validate([
-            'id_pelanggan'       => 'required|unique:pelanggans,id_pelanggan,' . $pelanggan->id,
-            'nama_pelanggan'     => 'required',
-            'nomor_whatsapp'     => 'nullable',
-            'tarif'              => 'nullable',
-            'daya'               => 'nullable',
-            'alamat'             => 'nullable',
-            'peruntukan_listrik' => 'nullable',
-            'status_pelanggan'   => 'required',
+            'id_pelanggan' => 'required|unique:pelanggans,id_pelanggan,' . $pelanggan->id,
+            'nama_pelanggan' => 'required',
         ]);
 
         $pelanggan->update($request->all());
 
+        Tagihan::where('pelanggan_id', $pelanggan->id)
+        ->update([
+            'updated_at' => now()
+        ]);
+
         return redirect()
             ->route('pelanggan.index')
-            ->with('success', 'Data pelanggan berhasil diperbarui.');
+            ->with('success', 'Data pelanggan berhasil diperbarui');
     }
 
-    /**
-     * Hapus pelanggan.
-     */
     public function destroy(Pelanggan $pelanggan)
     {
+        Tagihan::where('pelanggan_id', $pelanggan->id)->delete();
+
         $pelanggan->delete();
 
         return redirect()
             ->route('pelanggan.index')
-            ->with('success', 'Data pelanggan berhasil dihapus.');
-    }
-
-    /**
-     * Form upload import Excel.
-     */
-    public function importForm()
-    {
-        return view('pelanggan.import');
-    }
-
-    /**
-     * Proses import & sinkronisasi data pelanggan dari Excel.
-     */
-    public function import(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,xls|max:51200',
-        ]);
-
-        $import = new PelangganImport();
-        Excel::import($import, $request->file('file'));
-
-        // Jadi ini
-        $msg = "Import berhasil! "
-    . "{$import->getImportedCount()} pelanggan baru ditambahkan, "
-    . "{$import->getUpdatedCount()} pelanggan diperbarui.";
-    
-        return redirect()
-            ->route('pelanggan.index')
-            ->with('success', $msg);
+            ->with('success', 'Data pelanggan berhasil dihapus');
     }
 }

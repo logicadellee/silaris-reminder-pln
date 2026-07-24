@@ -2,8 +2,6 @@
 
 <div class="container-fluid">
 
-@foreach($tagihans as $tagihan)
-
 @php
 
 $pesan = "Yth. {$tagihan->pelanggan->nama_pelanggan},
@@ -197,15 +195,17 @@ Kembali
 
 </a>
 
-<a
-href="{{ route('tagihan.send',$tagihan->id) }}"
-class="btn btn-success">
+<form action="{{ route('tagihan.send',$tagihan->id) }}"
+        method="POST">
 
-<i class="bi bi-whatsapp"></i>
+    @csrf
 
-Kirim WhatsApp
+    <button class="btn btn-success">
+        <i class="bi bi-whatsapp"></i>
+        Kirim WhatsApp
+    </button>
 
-</a>
+</form>
 
 </div>
 
@@ -270,7 +270,5 @@ Lunas
 </div>
 
 </div>
-
-@endforeach
 
 </x-app-layout>

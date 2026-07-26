@@ -2,7 +2,7 @@
 
     <div class="sidebar-header">
 
-        <img src="{{ asset('images/pln.png') }}" class="logo-pln">
+        <img src="{{ asset('images/pln.png') }}" class="logo-pln" alt="PLN">
 
         <h3>SILARIS</h3>
 
@@ -38,20 +38,13 @@
 
     </div>
 
-    <form method="POST"
-            action="{{ route('logout') }}"
-            class="logout">
-
+    <form method="POST" action="{{ route('logout') }}" class="logout">
         @csrf
 
-        <button>
-
-            <i class="bi bi-arrow-left"></i>
-
+        <button type="submit">
+            <i class="bi bi-box-arrow-right me-2"></i>
             Logout
-
         </button>
-
     </form>
 
     <div class="sidebar-bg"></div>

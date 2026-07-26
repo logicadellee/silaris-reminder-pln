@@ -35,6 +35,19 @@ class TagihanController extends Controller
             );
 
         }
+
+        $totalTagihan = Tagihan::count();
+
+        $totalBelumBayar = Tagihan::where(
+            'status_pembayaran',
+            'Belum Bayar'
+        )->count();
+
+        $totalLunas = Tagihan::where(
+            'status_pembayaran',
+            'Lunas'
+        )->count();
+
         $query = Tagihan::with('pelanggan');
 
         if ($request->filled('periode')) {
@@ -61,10 +74,18 @@ class TagihanController extends Controller
 
         $tagihans = $query
             ->latest()
-            ->paginate(20)
+            ->paginate(10)
             ->withQueryString();
 
-        return view('tagihan.index', compact('tagihans'));
+        return view(
+            'tagihan.index',
+            compact(
+                'tagihans',
+                'totalTagihan',
+                'totalBelumBayar',
+                'totalLunas'
+            )
+        );
     }
         
         /**

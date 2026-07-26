@@ -51,7 +51,7 @@
 
                         <small>Total Tagihan</small>
 
-                        <h2>{{ $tagihans->count() }}</h2>
+                        <h2>{{ $totalTagihan }}</h2>
 
                         <span>Data</span>
 
@@ -152,9 +152,9 @@
 
         <form action="{{ route('tagihan.index') }}" method="GET">
 
-            <div class="row">
+            <div class="row align-items-end g-3">
 
-                <div class="col-md-4">
+                <div class="col-lg-4 col-md-6">
 
                     <label>Cari Pelanggan</label>
 
@@ -166,7 +166,7 @@
 
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-lg-4 col-md-6">
 
                     <label>Status</label>
 
@@ -182,7 +182,7 @@
 
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-lg-4 col-md-6">
 
                     <label>Periode</label>
 
@@ -193,47 +193,29 @@
 
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-12 mt-4">
 
-                    <label>&nbsp;</label>
+                    <div class="d-flex justify-content-center flex-wrap gap-3">
 
-                    <div class="d-grid gap-2">
-
-                        <button class="btn btn-primary">
-
+                        <button type="submit"
+                            class="btn btn-primary px-4">
                             <i class="bi bi-search"></i>
-
                             Cari
-
                         </button>
 
                         <a href="{{ route('tagihan.index') }}"
-                            class="btn btn-outline-secondary">
-
-                                <i class="bi bi-arrow-clockwise"></i>
-
-                            </a>
-
-                            <button
-                                type="button"
-                                id="btnBulkReminder"
-                                class="btn btn-success">
-
-                                <i class="bi bi-whatsapp"></i>
-
-                                Kirim Reminder
-
-                            </button>
-
-                        </div>
-
-                        <a
-                            href="{{ route('tagihan.index') }}"
-                            class="btn btn-outline-secondary">
-
+                            class="btn btn-outline-secondary px-4">
+                            <i class="bi bi-arrow-clockwise"></i>
                             Reset
-
                         </a>
+
+                        <button
+                            type="button"
+                            id="btnBulkReminder"
+                            class="btn btn-success px-4">
+                            <i class="bi bi-whatsapp"></i>
+                            Kirim Reminder
+                        </button>
 
                     </div>
 
@@ -415,6 +397,28 @@
             </tbody>
 
         </table>
+
+            <div class="card-footer bg-white">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+                    <small class="text-muted">
+
+                        Menampilkan
+                        {{ $tagihans->firstItem() }}
+                        -
+                        {{ $tagihans->lastItem() }}
+                        dari
+                        {{ $tagihans->total() }}
+                        data
+
+                    </small>
+
+                    {{ $tagihans->links() }}
+
+                </div>
+
+            </div>
 
         </form>
 

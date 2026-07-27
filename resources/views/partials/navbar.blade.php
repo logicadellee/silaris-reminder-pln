@@ -1,12 +1,12 @@
-<nav class="navbar navbar-expand-lg bg-white shadow-sm rounded-4 px-4 py-3 mb-4">
+<nav class="navbar navbar-expand-lg bg-white shadow-sm rounded-3 px-3 py-2 mb-3">
 
     <div class="container-fluid">
 
         <div>
 
-            <h4 class="fw-bold mb-0 text-primary">
+            <h6 class="fw-bold mb-0 text-primary">
                 Sistem Reminder Pembayaran Tagihan Listrik
-            </h4>
+            </h6>
 
             <small class="text-muted">
                 PT PLN (Persero) ULP Way Halim
@@ -22,7 +22,7 @@
 
                 <div
                     class="rounded-circle bg-primary d-flex justify-content-center align-items-center text-white fw-bold"
-                    style="width:50px;height:50px;font-size:20px;">
+                    style="width:42px;height:42px;font-size:18px;">
 
                     <i class="bi bi-person-fill"></i>
 
@@ -30,7 +30,7 @@
 
                 <div class="ms-3">
 
-                    <h6 class="mb-0 fw-bold">
+                    <h6 class="mb-0 fw-semibold">
                         Administrator
                     </h6>
 

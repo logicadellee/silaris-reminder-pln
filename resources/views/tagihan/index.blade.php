@@ -10,7 +10,7 @@
 
     </x-slot>
 
-    <div class="container-fluid">
+    <div class="container-fluid px-0">
 
     @if(session('success'))
 
@@ -39,7 +39,7 @@
 
         {{-- Statistik --}}
 
-        <div class="row g-3 mb-4">
+        <div class="row g-2 mb-3">
 
         <div class="col-lg-3 col-md-6">
 
@@ -141,7 +141,7 @@
 
         {{-- Filter --}}
 
-        <div class="card shadow-sm border-0 rounded-4 mb-4">
+        <div class="card shadow-sm border-0 rounded-3 mb-3">
 
     <div class="card-body">
 
@@ -195,7 +195,7 @@
 
                 <div class="col-12 mt-4">
 
-                    <div class="d-flex justify-content-center flex-wrap gap-3">
+                    <div class="filter-action">
 
                         <button type="submit"
                             class="btn btn-primary px-4">
@@ -270,7 +270,7 @@
                     <th>Nominal</th>
                     <th>Jatuh Tempo</th>
                     <th>Status</th>
-                    <!-- <th width="220">Aksi</th> -->
+                    <th width="220">Aksi</th>
 
                 </tr>
 
@@ -281,6 +281,10 @@
                 @forelse($tagihans as $tagihan)
 
                 <tr>
+
+                    <td>
+                        <input type="checkbox" name="tagihan[]" value="{{ $tagihan->id }}">
+                    </td>
 
                     <td>
 

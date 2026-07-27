@@ -41,7 +41,7 @@
             {{-- Navbar --}}
             @include('partials.navbar')
 
-            <div class="container-fluid py-4">
+            <div class="container-fluid content-wrapper py-3">
 
                 @isset($header)
 

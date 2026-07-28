@@ -1,13 +1,20 @@
 <x-app-layout>
 
-<x-slot name="header">
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-@include('components.admin.page-header',[
-'title'=>'Riwayat Pengiriman',
-'description'=>'Riwayat reminder WhatsApp kepada pelanggan'
-])
+    <div>
 
-</x-slot>
+        <h3 class="fw-bold mb-1">
+            Riwayat Pengiriman
+        </h3>
+
+        <p class="text-muted mb-0">
+            Riwayat reminder WhatsApp kepada pelanggan
+        </p>
+
+    </div>
+
+</div>
 
 <div class="card shadow-sm border-0">
 

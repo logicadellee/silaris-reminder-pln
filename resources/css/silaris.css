@@ -255,28 +255,34 @@ body{
 }
 
 .sidebar-header{
-    padding:28px 18px;
+    padding:28px 20px;
 
     text-align:center;
 
     color:#fff;
-}
 
-.logo-pln{
-    width:55px;
+    border-bottom:1px solid rgba(255,255,255,.15);
 
     margin-bottom:14px;
 }
 
+.logo-pln{
+    width:64px;
+
+    margin-bottom:12px;
+}
+
 .sidebar-header h3{
     font-size:24px;
+
     font-weight:700;
-    margin-bottom:5px;
+
+    margin-bottom:4px;
 }
 
 .sidebar-header small{
     font-size:13px;
-    color:#cbd5e1;
+    color:#dbeafe;
 }
 
 .menu{
@@ -290,31 +296,42 @@ body{
 }
 
 .menu a{
-    min-height:56px;
-
     display:flex;
-
     align-items:center;
-
     gap:14px;
 
-    padding:0 22px;
+    width:100%;
+    height:52px;
+
+    padding:0 18px;
+
+    color:#ffffff !important;
+    text-decoration:none !important;
 
     border-radius:14px;
 
-    font-size:18px;
-
+    font-size:15px;
     font-weight:500;
+
+    transition:.25s;
 }
 
 .menu a:hover{
-    background:rgba(255,255,255,.1);
+    background:rgba(255,255,255,.12);
+    color:#fff !important;
+    text-decoration:none !important;
 }
 
 .menu a.active{
-    background:#fff;
-    color:#0057B8;
-    box-shadow:0 5px 18px rgba(0,0,0,.08);
+    background:#ffffff;
+
+    color:#0057B8 !important;
+
+    font-weight:600;
+
+    text-decoration:none !important;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
 }
 
 /* ===========================
@@ -322,24 +339,44 @@ body{
 =========================== */
 
 .logout{
-    margin:auto 20px 30px;
+    margin-top:auto;
 
-    position:relative;
-
-    z-index:2;
+    padding:18px;
 }
 
 .logout button{
     
+    width:100%;
+
     height:52px;
 
-    border-radius:16px;
+    border:none;
 
-    font-size:18px;
+    border-radius:14px;
+
+    background:#ffffff;
+
+    color:#0057B8;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    transition:.25s;
 }
 
 .logout button:hover{
-    background:#f5f5f5;
+    background:#edf4ff;
+
+    transform:translateY(-2px);
 }
 
 /* ===========================
@@ -370,7 +407,11 @@ body{
 =========================== */
 
 .page-header{
-    margin-bottom:32px;
+    padding:0;
+
+    margin:0 0 20px;
+
+    min-height:auto;
 }
 
 .page-header h1,
@@ -465,13 +506,14 @@ body{
 }
 
 .table thead th{
-    background:#f3f8ff;
-
-    color:#0b5ed7;
-
-    font-weight:700;
-
-    border-bottom:2px solid #d7e8ff;
+    background:#f8fafc;
+    color:#334155;
+    border-bottom:2px solid #0d6efd;
+    padding:16px 14px;
+    font-size:14px;
+    font-weight:600;
+    text-align:center;
+    vertical-align:middle;
 }
 
 .table tbody tr{
@@ -489,7 +531,8 @@ body{
 }
 
 .table tbody td{
-    padding:10px 14px;
+    padding:12px 14px;
+    text-align:center;
     vertical-align:middle;
 }
 
@@ -500,11 +543,14 @@ body{
 }
 
 .btn-sm{
-
+    min-width:130px;
+    height:36px;
     border-radius:30px;
-
-    padding:6px 16px;
-
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:6px;
+    font-size:14px;
 }
 
 .table tbody tr:hover{
@@ -610,5 +656,23 @@ body{
 .card:hover{
 
     transform:translateY(-2px);
+
+}
+
+@media (max-width:768px){
+
+    .logout{
+
+        padding:15px;
+
+    }
+
+    .logout button{
+
+        height:48px;
+
+        font-size:14px;
+
+    }
 
 }

@@ -15,27 +15,6 @@ class TagihanController extends Controller
      */
     public function index(Request $request)
     {
-        $periode = now()->format('Y-m');
-
-        $pelanggans = Pelanggan::all();
-
-        foreach ($pelanggans as $pelanggan) {
-
-            Tagihan::firstOrCreate(
-                [
-                    'pelanggan_id' => $pelanggan->id,
-                    'periode' => $periode,
-                ],
-                [
-                    'nominal' => 0,
-                    'jatuh_tempo' => now()->endOfMonth(),
-                    'status_pembayaran' => 'Belum Bayar',
-                    'tanggal_import' => now(),
-                ]
-            );
-
-        }
-
         $totalTagihan = Tagihan::count();
 
         $totalBelumBayar = Tagihan::where(
@@ -50,12 +29,45 @@ class TagihanController extends Controller
 
         $query = Tagihan::with('pelanggan');
 
+        $totalTagihan = Tagihan::count();
+
+        $totalBelumBayar = Tagihan::where(
+            'status_pembayaran',
+            'Belum Bayar'
+        )->count();
+
+        $totalLunas = Tagihan::where(
+            'status_pembayaran',
+            'Lunas'
+        )->count();
+
+        $query = Tagihan::with('pelanggan')
+        ->withCount([
+            'riwayatPengirimans as reminder_berhasil' => function ($q) {
+                $q->where('status_pengiriman', 'Berhasil');
+            }
+        ]);
+
         if ($request->filled('periode')) {
             $query->where('periode', $request->periode);
         }
 
-        if ($request->filled('status')) {
-            $query->where('status_pembayaran', $request->status);
+        if ($request->filled('status_reminder')) {
+
+            if ($request->status_reminder == 'Belum') {
+
+                $query->whereDoesntHave('riwayatPengirimans');
+
+            } else {
+
+                $query->whereHas('riwayatPengirimans', function ($q) use ($request) {
+
+                    $q->where('status_pengiriman', $request->status_reminder);
+
+                });
+
+            }
+
         }
 
         if ($request->filled('search')) {
@@ -73,9 +85,16 @@ class TagihanController extends Controller
         }
 
         $tagihans = $query
-            ->latest()
-            ->paginate(10)
-            ->withQueryString();
+
+        ->orderBy('status_pembayaran')
+
+        ->orderBy('reminder_berhasil')
+
+        ->orderBy('jatuh_tempo')
+
+        ->paginate(10)
+
+        ->withQueryString();
 
         return view(
             'tagihan.index',
@@ -241,7 +260,7 @@ class TagihanController extends Controller
 
         return redirect()
         ->route('tagihan.index')
-        ->with('error','Gagal mengirim reminder.');
+        ->with('success','Reminder berhasil dikirim.');
     }
 
     RiwayatPengiriman::create([

@@ -37,108 +37,6 @@
 
     <div class="row g-4 mb-4">
 
-        {{-- Statistik --}}
-
-        <div class="row g-2 mb-3">
-
-        <div class="col-lg-3 col-md-6">
-
-            <div class="card dashboard-card total-card h-100">
-
-                <div class="card-body d-flex justify-content-between align-items-center">
-
-                    <div>
-
-                        <small>Total Tagihan</small>
-
-                        <h2>{{ $totalTagihan }}</h2>
-
-                        <span>Data</span>
-
-                    </div>
-
-                    <i class="bi bi-receipt icon-card"></i>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-
-            <div class="card dashboard-card warning-card h-100">
-
-                <div class="card-body d-flex justify-content-between align-items-center">
-
-                    <div>
-
-                        <small>Belum Bayar</small>
-
-                        <h2>{{ $tagihans->where('status_pembayaran','Belum Bayar')->count() }}</h2>
-
-                        <span>Data</span>
-
-                    </div>
-
-                    <i class="bi bi-exclamation-circle icon-card"></i>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-
-            <div class="card dashboard-card success-card h-100">
-
-                <div class="card-body d-flex justify-content-between align-items-center">
-
-                    <div>
-
-                        <small>Sudah Lunas</small>
-
-                        <h2>{{ $tagihans->where('status_pembayaran','Lunas')->count() }}</h2>
-
-                        <span>Data</span>
-
-                    </div>
-
-                    <i class="bi bi-check-circle icon-card"></i>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-
-            <div class="card dashboard-card info-card h-100">
-
-                <div class="card-body d-flex justify-content-between align-items-center">
-
-                    <div>
-
-                        <small>Reminder Siap Dikirim</small>
-
-                        <h2>{{ $tagihans->where('status_pembayaran','Belum Bayar')->count() }}</h2>
-
-                        <span>Data</span>
-
-                    </div>
-
-                    <i class="bi bi-whatsapp icon-card"></i>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
         {{-- Filter --}}
 
         <div class="card shadow-sm border-0 rounded-3 mb-3">
@@ -170,13 +68,21 @@
 
                     <label>Status</label>
 
-                    <select
-                        class="form-select"
-                        name="status">
+                    <select class="form-select" name="status_reminder">
 
-                        <option value="">Semua Status</option>
-                        <option>Belum Bayar</option>
-                        <option>Lunas</option>
+                        <option value="">Semua Reminder</option>
+
+                        <option value="Belum">
+                            Belum Pernah Dikirim
+                        </option>
+
+                        <option value="Berhasil">
+                            Berhasil
+                        </option>
+
+                        <option value="Gagal">
+                            Gagal
+                        </option>
 
                     </select>
 
@@ -253,7 +159,7 @@
 
         <table class="table table-hover align-middle text-nowrap mb-0">
 
-            <thead class="table-dark align-middle">
+            <thead>
 
                 <tr>
 
@@ -269,7 +175,7 @@
                     <th>Periode</th>
                     <th>Nominal</th>
                     <th>Jatuh Tempo</th>
-                    <th>Status</th>
+                    <th>Status Reminder</th>
                     <th width="220">Aksi</th>
 
                 </tr>
@@ -282,20 +188,16 @@
 
                 <tr>
 
-                    <td>
-                        <input type="checkbox" name="tagihan[]" value="{{ $tagihan->id }}">
-                    </td>
-
-                    <td>
-
-                        {{ $loop->iteration }}
-
+                    <td class="text-center">
                         <input
                             type="checkbox"
                             class="form-check-input check-item"
                             name="tagihan[]"
                             value="{{ $tagihan->id }}">
+                    </td>
 
+                    <td class="text-center">
+                        {{ $loop->iteration }}
                     </td>
 
                     <td>
@@ -304,7 +206,7 @@
 
                     </td>
 
-                    <td>
+                    <td class="text-start fw-medium">
 
                         {{ $tagihan->pelanggan->nama_pelanggan }}
 
@@ -330,23 +232,23 @@
 
                     <td>
 
-                        @if($tagihan->status_pembayaran=='Belum Bayar')
+                    @if($tagihan->reminder_berhasil)
 
-                            <span class="badge bg-warning">
+                    <span class="badge bg-success">
 
-                                Belum Bayar
+                    Sudah Dikirim
 
-                            </span>
+                    </span>
 
-                        @else
+                    @else
 
-                            <span class="badge bg-success">
+                    <span class="badge bg-secondary">
 
-                                Lunas
+                    Belum Dikirim
 
-                            </span>
+                    </span>
 
-                        @endif
+                    @endif
 
                     </td>
 
@@ -364,14 +266,31 @@
 
                             @if($tagihan->status_pembayaran == 'Belum Bayar')
 
+                            @if($tagihan->reminder_berhasil > 0)
+
                                 <a href="{{ route('tagihan.reminder',$tagihan->id) }}"
-                                    class="btn btn-success btn-sm rounded-pill">
+                                class="btn btn-warning btn-sm rounded-pill px-3">
 
-                                        <i class="bi bi-whatsapp"></i>
-                                        Reminder
+                                    <i class="bi bi-arrow-repeat"></i>
 
-                                    </a>
+                                    Kirim Ulang
+
+                                </a>
+
+                            @else
+
+                                <a href="{{ route('tagihan.reminder',$tagihan->id) }}"
+                                class="btn btn-success btn-sm rounded-pill px-3">
+
+                                    <i class="bi bi-whatsapp"></i>
+
+                                    Kirim
+
+                                </a>
+
                             @endif
+
+                        @endif
 
                         </div>
 
@@ -383,7 +302,7 @@
 
                 <tr>
 
-                    <td colspan="8" class="text-center py-5">
+                    <td colspan="9" class="text-center py-5">
 
                         <i class="bi bi-inbox display-3 text-primary"></i>
 
@@ -517,7 +436,10 @@ document.querySelectorAll('.btn-detail').forEach(function(btn){
             document.getElementById('d_status').textContent =
                 data.status_pembayaran;
 
-            let modal = new bootstrap.Modal(document.getElementById('detailModal'));
+            const modalEl = document.getElementById('detailModal');
+
+            const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+
             modal.show();
 
         })
@@ -529,6 +451,22 @@ document.querySelectorAll('.btn-detail').forEach(function(btn){
     });
 
 });
+</script>
+
+<script>
+
+const detailModal = document.getElementById('detailModal');
+
+detailModal.addEventListener('hidden.bs.modal', function () {
+
+    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+
+    document.body.classList.remove('modal-open');
+
+    document.body.style.removeProperty('padding-right');
+
+});
+
 </script>
 
 <div class="modal fade"
@@ -548,8 +486,10 @@ document.querySelectorAll('.btn-detail').forEach(function(btn){
                 </h5>
 
                 <button
+                    type="button"
                     class="btn-close btn-close-white"
-                    data-bs-dismiss="modal">
+                    data-bs-dismiss="modal"
+                    aria-label="Close">
                 </button>
 
             </div>
@@ -622,47 +562,28 @@ document.querySelectorAll('.btn-detail').forEach(function(btn){
 
 <script>
 
-document.querySelectorAll('.btn-detail').forEach(btn=>{
+const checkAll = document.getElementById('checkAll');
+const checkItems = document.querySelectorAll('.check-item');
 
-    btn.addEventListener('click',function(){
+// Klik checkbox header
+checkAll.addEventListener('change', function () {
 
-        let id=this.dataset.id;
+    checkItems.forEach(item => {
+        item.checked = this.checked;
+    });
 
-        fetch('/tagihan/'+id)
+});
 
-        .then(res=>res.json())
+// Jika salah satu checkbox di-uncheck,
+// checkbox header ikut berubah
+checkItems.forEach(item => {
 
-        .then(data=>{
+    item.addEventListener('change', function () {
 
-            document.getElementById('d_idpel').innerHTML =
-            data.pelanggan.id_pelanggan;
+        const total = checkItems.length;
+        const checked = document.querySelectorAll('.check-item:checked').length;
 
-            document.getElementById('d_nama').innerHTML =
-            data.pelanggan.nama_pelanggan;
-
-            document.getElementById('d_wa').innerHTML =
-            data.pelanggan.nomor_whatsapp;
-
-            document.getElementById('d_alamat').innerHTML =
-            data.pelanggan.alamat;
-
-            document.getElementById('d_periode').innerHTML =
-            data.periode;
-
-            document.getElementById('d_nominal').innerHTML =
-            "Rp "+Number(data.nominal).toLocaleString('id-ID');
-
-            document.getElementById('d_jatuh').innerHTML =
-            new Date(data.jatuh_tempo).toLocaleDateString('id-ID');
-
-            document.getElementById('d_status').innerHTML =
-            data.status_pembayaran;
-
-            new bootstrap.Modal(
-                document.getElementById('detailModal')
-            ).show();
-
-        });
+        checkAll.checked = (total === checked);
 
     });
 

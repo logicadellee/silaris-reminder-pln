@@ -43,15 +43,15 @@
 
             <div class="container-fluid content-wrapper py-3">
 
-                @isset($header)
+                @if(isset($header) && trim($header) != '')
 
-                    <div class="mb-4">
+                <div class="mb-3">
 
-                        {{ $header }}
+                    {{ $header }}
 
-                    </div>
+                </div>
 
-                @endisset
+                @endif
 
                 {{ $slot }}
 

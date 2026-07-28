@@ -36,31 +36,29 @@ class RiwayatController extends Controller
 
         }
 
+        $statistik = RiwayatPengiriman::selectRaw("
+            COUNT(*) as total,
+            SUM(status_pengiriman='Berhasil') as berhasil,
+            SUM(status_pengiriman='Pending') as pending,
+            SUM(status_pengiriman='Gagal') as gagal
+        ")->first();
+
         $riwayats = $query
             ->latest('waktu_kirim')
             ->paginate(20)
             ->withQueryString();
 
-        return view('riwayat.index',[
+        return view('riwayat.index', [
 
-            'riwayats'=>$riwayats,
+            'riwayats' => $riwayats,
 
-            'total'=>RiwayatPengiriman::count(),
+            'total' => $statistik->total,
 
-            'berhasil'=>RiwayatPengiriman::where(
-                'status_pengiriman',
-                'Berhasil'
-            )->count(),
+            'berhasil' => $statistik->berhasil,
 
-            'pending'=>RiwayatPengiriman::where(
-                'status_pengiriman',
-                'Pending'
-            )->count(),
+            'pending' => $statistik->pending,
 
-            'gagal'=>RiwayatPengiriman::where(
-                'status_pengiriman',
-                'Gagal'
-            )->count(),
+            'gagal' => $statistik->gagal,
 
         ]);
     }

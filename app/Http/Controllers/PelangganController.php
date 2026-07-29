@@ -4,15 +4,34 @@ namespace App\Http\Controllers;
 
 use App\Models\Pelanggan;
 use App\Models\Tagihan;
+use App\Imports\PelangganImport;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PelangganController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pelanggans = Pelanggan::latest()->paginate(10);
+        $search = $request->input('search');
 
-        return view('pelanggan.index', compact('pelanggans'));
+        $pelanggans = Pelanggan::when($search, function ($query, $search) {
+                $query->where('nama_pelanggan', 'like', "%{$search}%")
+                    ->orWhere('id_pelanggan', 'like', "%{$search}%")
+                    ->orWhere('nomor_whatsapp', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->paginate(10);
+
+        return view('pelanggan.index', compact('pelanggans', 'search'));
+    }
+
+    public function show(Pelanggan $pelanggan)
+    {
+        $tagihans = Tagihan::where('pelanggan_id', $pelanggan->id)
+            ->latest('periode')
+            ->get();
+
+        return view('pelanggan.show', compact('pelanggan', 'tagihans'));
     }
 
     public function create()
@@ -76,5 +95,24 @@ class PelangganController extends Controller
         return redirect()
             ->route('pelanggan.index')
             ->with('success', 'Data pelanggan berhasil dihapus');
+    }
+
+    public function importForm()
+    {
+        return view('pelanggan.import');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        $import = new PelangganImport;
+        Excel::import($import, $request->file('file'));
+
+        return redirect()
+            ->route('pelanggan.index')
+            ->with('success', "Import selesai: {$import->getImportedCount()} pelanggan baru, {$import->getUpdatedCount()} pelanggan diperbarui.");
     }
 }

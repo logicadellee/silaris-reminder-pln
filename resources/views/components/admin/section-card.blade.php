@@ -1,4 +1,4 @@
-@props(['title', 'description' => null, 'class' => ''])
+@props(['title' => null, 'description' => null, 'class' => ''])
 
 <div class="card border-0 shadow-sm {{ $class }}">
     <div class="card-body">

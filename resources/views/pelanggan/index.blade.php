@@ -6,8 +6,37 @@
         ])
     </x-slot>
 
-    <x-admin.section-card title="Daftar Pelanggan" description="Informasi pelanggan yang aktif dan terdaftar dalam sistem.">
+    <style>
+        .btn-soft-primary {
+            background-color: #e7f1ff;
+            color: #0d6efd;
+            border: none;
+        }
+        .btn-soft-primary:hover {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+        .btn-soft-secondary {
+            background-color: #fff3cd;
+            color: #997404;
+            border: none;
+        }
+        .btn-soft-secondary:hover {
+            background-color: #997404;
+            color: #fff;
+        }
+        .btn-soft-danger {
+            background-color: #f8d7da;
+            color: #dc3545;
+            border: none;
+        }
+        .btn-soft-danger:hover {
+            background-color: #dc3545;
+            color: #fff;
+        }
+    </style>
 
+    <x-admin.section-card>
         {{-- Alert sukses --}}
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -19,7 +48,7 @@
         {{-- Tombol aksi & search --}}
         <div class="d-flex justify-content-between align-items-center mb-3 gap-2 flex-wrap">
             <form method="GET" action="{{ route('pelanggan.index') }}" class="d-flex gap-2">
-                <input type="text" name="search" class="form-control" placeholder="Cari nama, ID, atau No. WA..." value="{{ $search ?? '' }}">
+                <input type="text" name="search" class="form-control" placeholder="Cari pelanggan..." value="{{ $search ?? '' }}">
                 <button type="submit" class="btn btn-outline-secondary">
                     <i class="bi bi-search"></i>
                 </button>
@@ -79,16 +108,19 @@
                             </td>
                             <td>
                                 <div class="d-flex gap-1">
-                                    <a href="{{ route('pelanggan.show', $pelanggan) }}" class="btn btn-sm btn-info text-white">
+                                    <a href="{{ route('pelanggan.show', $pelanggan) }}"
+                                       class="btn btn-sm btn-soft-primary" title="Lihat detail">
                                         <i class="bi bi-eye"></i>
                                     </a>
-                                    <a href="{{ route('pelanggan.edit', $pelanggan) }}" class="btn btn-sm btn-warning text-white">
+                                    <a href="{{ route('pelanggan.edit', $pelanggan) }}"
+                                       class="btn btn-sm btn-soft-secondary" title="Edit">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <form action="{{ route('pelanggan.destroy', $pelanggan) }}" method="POST" onsubmit="return confirm('Yakin hapus pelanggan ini?')">
+                                    <form action="{{ route('pelanggan.destroy', $pelanggan) }}" method="POST"
+                                          onsubmit="return confirm('Yakin hapus pelanggan ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">
+                                        <button type="submit" class="btn btn-sm btn-soft-danger" title="Hapus">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </form>

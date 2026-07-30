@@ -1,6 +1,7 @@
 <x-app-layout>
 
     <x-slot name="header">
+
         <div class="d-flex justify-content-between align-items-center">
 
             <div>
@@ -10,240 +11,117 @@
                 </h3>
 
                 <small class="text-muted">
-                    Sistem Reminder Tagihan PLN
-                </small>
-
-            </div>
-
-            <div class="text-end">
-
-                <div class="fw-semibold text-primary"
-                    id="tanggalHari">
-                </div>
-
-                <small class="text-muted"
-                    id="jamSekarang">
+                    Sistem Reminder Pembayaran Tagihan PLN
                 </small>
 
             </div>
 
         </div>
+
     </x-slot>
 
     <div class="container-fluid py-4">
 
-        {{-- CARD STATISTIK --}}
+        <!-- Welcome Banner -->
 
-        <div class="row g-4">
+        <div class="card welcome-banner shadow-lg border-0 rounded-4 mb-4">
 
-            <div class="col-xl-4 col-md-6">
+            <div class="card-body p-5">
 
-                <div class="card shadow border-0 rounded-4 h-100 dashboard-card">
+                <div class="row align-items-center">
 
-                    <div class="card-body">
+                    <div class="col-lg-8">
 
-                        <div class="d-flex justify-content-between">
+                        <span class="badge bg-light text-primary px-3 py-2 mb-3">
 
-                            <div>
+                            Dashboard SILARIS
 
-                                <small class="text-muted">
-                                    Total Pelanggan
-                                </small>
+                        </span>
 
-                                <h2 class="fw-bold mt-2">
+                        <h2 class="fw-bold text-white">
 
-                                    {{ number_format($totalPelanggan) }}
-
-                                </h2>
-
-                            </div>
-
-                            <div class="icon-box bg-primary">
-
-                                👥
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-xl-4 col-md-6">
-
-                <div class="card shadow border-0 rounded-4 h-100 dashboard-card">
-
-                    <div class="card-body">
-
-                        <div class="d-flex justify-content-between">
-
-                            <div>
-
-                                <small class="text-muted">
-                                    Total Tagihan
-                                </small>
-
-                                <h2 class="fw-bold mt-2">
-
-                                    {{ number_format($totalTagihan) }}
-
-                                </h2>
-
-                            </div>
-
-                            <div class="icon-box bg-warning">
-
-                                📄
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-xl-4 col-md-6">
-
-                <div class="card shadow border-0 rounded-4 h-100 dashboard-card">
-
-                    <div class="card-body">
-
-                        <div class="d-flex justify-content-between">
-
-                            <div>
-
-                                <small class="text-muted">
-                                    Total Lunas
-                                </small>
-
-                                <h2 class="fw-bold text-success mt-2">
-
-                                    {{ number_format($totalLunas) }}
-
-                                </h2>
-
-                            </div>
-
-                            <div class="icon-box bg-success">
-
-                                ✔
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-xl-4 col-md-6">
-
-                <div class="card shadow border-0 rounded-4 h-100 dashboard-card">
-
-                    <div class="card-body">
-
-                        <div class="d-flex justify-content-between">
-
-                            <div>
-
-                                <small class="text-muted">
-                                    Belum Bayar
-                                </small>
-
-                                <h2 class="fw-bold text-danger mt-2">
-
-                                    {{ number_format($totalBelumBayar) }}
-
-                                </h2>
-
-                            </div>
-
-                            <div class="icon-box bg-danger">
-
-                                !
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-xl-4 col-md-6">
-
-                <div class="card shadow border-0 rounded-4 h-100 dashboard-card">
-
-                    <div class="card-body">
-
-                        <small class="text-muted">
-
-                            Persentase Lunas
-
-                        </small>
-
-                        <h2 class="fw-bold text-success mt-2">
-
-                            {{ $persentaseLunas }}%
+                            Selamat Datang, Administrator
 
                         </h2>
 
-                        <div class="progress mt-3">
+                        <p class="mt-3 text-light fs-5">
 
-                            <div
-                                class="progress-bar bg-success"
-                                style="width:{{ $persentaseLunas }}%">
+                            Sistem Informasi Reminder Pembayaran Tagihan
+                            PT PLN (Persero) ULP Way Halim.
+
+                            Dashboard ini membantu memantau pelanggan,
+                            tagihan listrik, dan proses pengiriman reminder
+                            secara cepat dan real-time.
+
+                        </p>
+
+                        <div class="row mt-4">
+
+                            <div class="col-md-6">
+
+                                <div class="glass-box">
+
+                                    <div class="d-flex align-items-center">
+
+                                        <div class="mini-icon bg-primary">
+
+                                            <i class="bi bi-calendar-event-fill"></i>
+
+                                        </div>
+
+                                        <div class="ms-3">
+
+                                            <small>Hari Ini</small>
+
+                                            <div class="fw-bold" id="tanggalBanner"></div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6 mt-3 mt-md-0">
+
+                                <div class="glass-box">
+
+                                    <div class="d-flex align-items-center">
+
+                                        <div class="mini-icon bg-success">
+
+                                            <i class="bi bi-clock-fill"></i>
+
+                                        </div>
+
+                                        <div class="ms-3">
+
+                                            <small>Jam Sekarang</small>
+
+                                            <div class="fw-bold" id="jamBanner"></div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
                             </div>
 
                         </div>
 
                     </div>
 
-                </div>
+                    <div class="col-lg-4 text-center">
 
-            </div>
+                        <img
 
-            <div class="col-xl-4 col-md-6">
+                            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
 
-                <div class="card shadow border-0 rounded-4 h-100 dashboard-card">
+                            class="banner-image"
 
-                    <div class="card-body">
-
-                        <div class="d-flex justify-content-between">
-
-                            <div>
-
-                                <small class="text-muted">
-
-                                    Total Pengiriman
-
-                                </small>
-
-                                <h2 class="fw-bold text-info mt-2">
-
-                                    {{ number_format($totalPengiriman) }}
-
-                                </h2>
-
-                            </div>
-
-                            <div class="icon-box bg-info">
-
-                                📨
-
-                            </div>
-
-                        </div>
+                            alt="Dashboard">
 
                     </div>
 
@@ -253,24 +131,40 @@
 
         </div>
 
-        <div class="row mt-4">
+        <!-- Statistik -->
 
-            {{-- Grafik Donut --}}
-        <div class="col-lg-4">
+        <div class="row g-4">
 
-            <div class="card shadow border-0 rounded-4 h-100">
+    {{-- Total Pelanggan --}}
+    <div class="col-xl-3 col-md-6">
 
-                <div class="card-header bg-white border-0">
+        <div class="card stat-card pelanggan h-100">
 
-                    <h5 class="fw-bold mb-0">
-                        Statistik Pembayaran
-                    </h5>
+            <div class="card-body">
 
-                </div>
+                <div class="d-flex justify-content-between align-items-start">
 
-                <div class="card-body">
+                    <div>
 
-                    <canvas id="donutChart" height="280"></canvas>
+                        <span class="card-title-small">
+                            Total Pelanggan
+                        </span>
+
+                        <h2 class="fw-bold mt-3 mb-1">
+                            {{ number_format($totalPelanggan) }}
+                        </h2>
+
+                        <small class="text-muted">
+                            Data pelanggan terdaftar
+                        </small>
+
+                    </div>
+
+                    <div class="stat-icon bg-primary">
+
+                        <i class="bi bi-people-fill"></i>
+
+                    </div>
 
                 </div>
 
@@ -278,101 +172,176 @@
 
         </div>
 
-        {{-- Tabel Tagihan --}}
-        <div class="col-lg-8">
+    </div>
 
-            <div class="card shadow border-0 rounded-4">
+    {{-- Total Tagihan --}}
+    <div class="col-xl-3 col-md-6">
 
-                <div class="card-header bg-white border-0 d-flex justify-content-between">
+        <div class="card stat-card tagihan h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-start">
+
+                    <div>
+
+                        <span class="card-title-small">
+                            Total Tagihan
+                        </span>
+
+                        <h2 class="fw-bold mt-3 mb-1">
+                            {{ number_format($totalTagihan) }}
+                        </h2>
+
+                        <small class="text-muted">
+                            Seluruh data tagihan
+                        </small>
+
+                    </div>
+
+                    <div class="stat-icon bg-warning">
+
+                        <i class="bi bi-receipt-cutoff"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {{-- Total Pengiriman --}}
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card stat-card pengiriman h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-start">
+
+                    <div>
+
+                        <span class="card-title-small">
+                            Total Pengiriman
+                        </span>
+
+                        <h2 class="fw-bold mt-3 mb-1 text-info">
+                            {{ number_format($totalPengiriman) }}
+                        </h2>
+
+                        <small class="text-muted">
+                            Reminder berhasil dikirim
+                        </small>
+
+                    </div>
+
+                    <div class="stat-icon bg-info">
+
+                        <i class="bi bi-send-check-fill"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {{-- Persentase --}}
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card stat-card persentase h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-start">
+
+                    <div>
+
+                        <span class="card-title-small">
+                            Persentase Pengiriman
+                        </span>
+
+                        <h2 class="fw-bold mt-3 mb-1 text-success">
+                            {{ $persentasePengiriman }}%
+                        </h2>
+
+                        <small class="text-muted">
+                            Tingkat keberhasilan
+                        </small>
+
+                    </div>
+
+                    <div class="stat-icon bg-success">
+
+                        <i class="bi bi-graph-up-arrow"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    </div>
+
+    <div class="row mt-4">
+
+    <div class="col-lg-8">
+
+        <div class="card border-0 shadow-lg rounded-4 h-100">
+
+            <div class="card-body p-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
 
                     <h5 class="fw-bold mb-0">
 
-                        5 Tagihan Jatuh Tempo Terdekat
+                        Progress Pengiriman Reminder
 
                     </h5>
 
-                    <span class="badge bg-danger">
+                    <span class="badge bg-success fs-6">
 
-                        {{ $tagihanTerdekat->count() }} Data
+                        {{ $persentasePengiriman }}%
 
                     </span>
 
                 </div>
 
-                <div class="table-responsive">
+                <div class="progress progress-modern">
 
-                    <table class="table table-hover align-middle mb-0">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
 
-                        <thead class="table-light">
+                        style="width: {{ $persentasePengiriman }}%">
 
-                        <tr>
+                    </div>
 
-                            <th>Nama Pelanggan</th>
+                </div>
 
-                            <th>Periode</th>
+                <div class="mt-3">
 
-                            <th>Jatuh Tempo</th>
+                    <small class="text-muted">
 
-                            <th>Status</th>
+                        Sistem telah mengirim
 
-                        </tr>
+                        <strong>{{ number_format($totalPengiriman) }}</strong>
 
-                        </thead>
+                        reminder dari
 
-                        <tbody>
+                        <strong>{{ number_format($totalTagihan) }}</strong>
 
-                        @forelse($tagihanTerdekat as $tagihan)
+                        tagihan yang tersedia.
 
-                            <tr>
-
-                                <td>
-
-                                    {{ $tagihan->pelanggan->nama }}
-
-                                </td>
-
-                                <td>
-
-                                    {{ $tagihan->periode }}
-
-                                </td>
-
-                                <td>
-
-                                    {{ $tagihan->jatuh_tempo->format('d M Y') }}
-
-                                </td>
-
-                                <td>
-
-                                    <span class="badge bg-danger">
-
-                                        Belum Bayar
-
-                                    </span>
-
-                                </td>
-
-                            </tr>
-
-                        @empty
-
-                            <tr>
-
-                                <td colspan="4"
-                                    class="text-center text-muted">
-
-                                    Tidak ada tagihan.
-
-                                </td>
-
-                            </tr>
-
-                        @endforelse
-
-                        </tbody>
-
-                    </table>
+                    </small>
 
                 </div>
 
@@ -382,67 +351,47 @@
 
     </div>
 
-    {{-- Baris kedua --}}
+    <div class="col-lg-4 mt-4 mt-lg-0">
 
-    <div class="row mt-4">
-            {{-- Progress --}}
-        <div class="col-lg-6">
+        <div class="card border-0 shadow-lg rounded-4 h-100">
 
-            <div class="card shadow border-0 rounded-4 h-100">
+            <div class="card-body p-4">
 
-                <div class="card-header bg-white border-0">
+                <h5 class="fw-bold mb-4">
 
-                    <h5 class="fw-bold mb-0">
-                        Progress Pembayaran
-                    </h5>
+                    Informasi Sistem
+
+                </h5>
+
+                <div class="system-item">
+
+                    <i class="bi bi-check-circle-fill text-success"></i>
+
+                    <span>Sistem berjalan normal.</span>
 
                 </div>
 
-                <div class="card-body">
+                <div class="system-item">
 
-                    <p class="mb-1">
+                    <i class="bi bi-database-fill text-primary"></i>
 
-                        Tagihan Lunas
+                    <span>Database berhasil terhubung.</span>
 
-                        <span class="float-end">
+                </div>
 
-                            {{ $persentaseLunas }}%
+                <div class="system-item">
 
-                        </span>
+                    <i class="bi bi-envelope-check-fill text-info"></i>
 
-                    </p>
+                    <span>Reminder siap dikirim.</span>
 
-                    <div class="progress mb-4" style="height:10px">
+                </div>
 
-                        <div class="progress-bar bg-success"
+                <div class="system-item">
 
-                            style="width:{{ $persentaseLunas }}%">
+                    <i class="bi bi-shield-check text-warning"></i>
 
-                        </div>
-
-                    </div>
-
-                    <p class="mb-1">
-
-                        Belum Bayar
-
-                        <span class="float-end">
-
-                            {{ 100-$persentaseLunas }}%
-
-                        </span>
-
-                    </p>
-
-                    <div class="progress" style="height:10px">
-
-                        <div class="progress-bar bg-danger"
-
-                            style="width:{{ 100-$persentaseLunas }}%">
-
-                        </div>
-
-                    </div>
+                    <span>Data aman dan tersimpan.</span>
 
                 </div>
 
@@ -450,181 +399,332 @@
 
         </div>
 
-        {{-- Informasi --}}
-        <div class="col-lg-6">
+    </div>
 
-            <div class="card shadow border-0 rounded-4 h-100">
-
-                <div class="card-header bg-white border-0">
-
-                    <h5 class="fw-bold mb-0">
-
-                        Informasi Dashboard
-
-                    </h5>
-
-                </div>
-
-                <div class="card-body">
-
-                    <div class="alert alert-primary">
-
-                        <strong>Total Pelanggan :</strong>
-
-                        {{ number_format($totalPelanggan) }}
-
-                    </div>
-
-                    <div class="alert alert-warning">
-
-                        <strong>Total Tagihan :</strong>
-
-                        {{ number_format($totalTagihan) }}
-
-                    </div>
-
-                    <div class="alert alert-success">
-
-                        <strong>Total Lunas :</strong>
-
-                        {{ number_format($totalLunas) }}
-
-                    </div>
-
-                    <div class="alert alert-danger">
-
-                        <strong>Belum Bayar :</strong>
-
-                        {{ number_format($totalBelumBayar) }}
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
+</div>
 
     </div>
 
     <style>
 
-    .dashboard-card{
+        body{
+            background:#f4f7fb;
+        }
 
-    transition:.3s;
+        /* ==========================
+           WELCOME BANNER
+        ========================== */
 
-    }
+        .welcome-banner{
 
-    .dashboard-card:hover{
+    background:
+        linear-gradient(
+            90deg,
+            rgba(13,110,253,.95) 0%,
+            rgba(79,157,255,.90) 60%,
+            rgba(79,157,255,.75) 100%
+        ),
+        url("{{ asset('images/tiang.jpg') }}");
 
-    transform:translateY(-6px);
+    background-repeat:no-repeat;
 
-    box-shadow:0 15px 35px rgba(0,0,0,.15)!important;
+    background-position:right center;
 
-    }
+    background-size:contain;
 
-    .icon-box{
+    border:none;
 
-    width:65px;
+    overflow:hidden;
 
-    height:65px;
+}
 
-    border-radius:50%;
+        .welcome-banner h2{
 
-    display:flex;
+            color:white;
 
-    justify-content:center;
+            font-size:2rem;
 
-    align-items:center;
+        }
 
-    font-size:28px;
+        .welcome-banner p{
 
-    color:white;
+            color:#eef4ff;
 
-    }
+        }
+
+        .glass-box{
+
+            background:rgba(255,255,255,.18);
+
+            backdrop-filter:blur(10px);
+
+            border-radius:15px;
+
+            padding:15px;
+
+            color:white;
+
+        }
+
+        .glass-box small{
+
+            color:#e9f2ff;
+
+        }
+
+        .banner-image{
+
+            width:240px;
+
+            max-width:100%;
+
+            animation:float 4s ease-in-out infinite;
+
+        }
+
+        .mini-icon{
+
+            width:50px;
+
+            height:50px;
+
+            border-radius:50%;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+
+            color:white;
+
+            font-size:22px;
+
+        }
+
+        /* ==========================
+           CARD
+        ========================== */
+
+        .stat-card{
+
+            border:none;
+
+            border-radius:18px;
+
+            overflow:hidden;
+
+            transition:.35s;
+
+            box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+            position:relative;
+
+        }
+
+        .stat-card:hover{
+
+            transform:translateY(-8px);
+
+            box-shadow:0 20px 40px rgba(0,0,0,.15);
+
+        }
+
+        .stat-card::before{
+
+            content:"";
+
+            position:absolute;
+
+            left:0;
+
+            top:0;
+
+            width:100%;
+
+            height:6px;
+
+        }
+
+        .pelanggan::before{
+
+            background:#0d6efd;
+
+        }
+
+        .tagihan::before{
+
+            background:#ffc107;
+
+        }
+
+        .pengiriman::before{
+
+            background:#0dcaf0;
+
+        }
+
+        .persentase::before{
+
+            background:#198754;
+
+        }
+
+        .card-title-small{
+
+            color:#6c757d;
+
+            font-size:.9rem;
+
+        }
+
+        .stat-icon{
+
+            width:68px;
+
+            height:68px;
+
+            border-radius:18px;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+
+            color:white;
+
+            font-size:28px;
+
+        }
+
+        /* ==========================
+           PROGRESS
+        ========================== */
+
+        .progress-modern{
+
+            height:14px;
+
+            border-radius:50px;
+
+            background:#e9ecef;
+
+        }
+
+        .progress-bar{
+
+            border-radius:50px;
+
+        }
+
+        /* ==========================
+           INFORMASI
+        ========================== */
+
+        .system-item{
+
+            display:flex;
+
+            align-items:center;
+
+            gap:12px;
+
+            padding:12px 0;
+
+            border-bottom:1px solid #efefef;
+
+        }
+
+        .system-item:last-child{
+
+            border-bottom:none;
+
+        }
+
+        .system-item i{
+
+            font-size:22px;
+
+        }
+
+        /* ==========================
+           ANIMASI
+        ========================== */
+
+        @keyframes float{
+
+            0%{
+
+                transform:translateY(0);
+
+            }
+
+            50%{
+
+                transform:translateY(-12px);
+
+            }
+
+            100%{
+
+                transform:translateY(0);
+
+            }
+
+        }
+
+        /* ==========================
+           RESPONSIVE
+        ========================== */
+
+        @media(max-width:992px){
+
+            .welcome-banner{
+
+                text-align:center;
+
+            }
+
+            .banner-image{
+
+                margin-top:35px;
+
+                width:180px;
+
+            }
+
+        }
 
     </style>
 
-    <script>
+   <script>
 
-    const donut=document.getElementById('donutChart');
+function updateClock(){
 
-    new Chart(donut,{
+    const now = new Date();
 
-    type:'doughnut',
-
-    data:{
-
-    labels:['Lunas','Belum Bayar'],
-
-    datasets:[{
-
-    data:[
-
-    {{ $totalLunas }},
-
-    {{ $totalBelumBayar }}
-
-    ],
-
-    backgroundColor:[
-
-    '#198754',
-
-    '#dc3545'
-
-    ]
-
-    }]
-
-    },
-
-    options:{
-
-    plugins:{
-
-    legend:{
-
-    position:'bottom'
-
-    }
-
-    }
-
-    }
-
+    const tanggal = now.toLocaleDateString("id-ID",{
+        weekday:"long",
+        day:"numeric",
+        month:"long",
+        year:"numeric"
     });
 
-    function updateClock(){
-
-    const now=new Date();
-
-    document.getElementById("tanggalHari").innerHTML=
-
-    now.toLocaleDateString("id-ID",{
-
-    weekday:'long',
-
-    day:'numeric',
-
-    month:'long',
-
-    year:'numeric'
-
+    const jam = now.toLocaleTimeString("id-ID",{
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
     });
 
-    document.getElementById("jamSekarang").innerHTML=
+    document.getElementById("tanggalBanner").innerHTML = tanggal;
+    document.getElementById("jamBanner").innerHTML = jam;
 
-    now.toLocaleTimeString("id-ID");
+}
 
-    }
+updateClock();
+setInterval(updateClock,1000);
 
-    updateClock();
+</script>
 
-    setInterval(updateClock,1000);
-
-    </script>
-
-    </div>
-
-    </x-app-layout>
+</x-app-layout>

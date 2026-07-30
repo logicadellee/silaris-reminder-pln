@@ -50,7 +50,7 @@
                     <tr>
                         <th>Jatuh Tempo</th>
                         <td>
-                            {{ $tagihan->jatuh_tempo->format('d F Y') }}
+                            {{ $tagihan->jatuh_tempo_display }}
                         </td>
                     </tr>
 

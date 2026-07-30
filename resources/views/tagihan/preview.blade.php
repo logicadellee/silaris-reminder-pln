@@ -32,7 +32,7 @@ Kami mengingatkan bahwa tagihan listrik Anda dengan rincian berikut:
 ID Pelanggan : {$tagihan->pelanggan->id_pelanggan}
 Periode : {$tagihan->periode}
 Nominal : Rp " . number_format($tagihan->nominal,0,',','.') . "
-Jatuh Tempo : " . $tagihan->jatuh_tempo->format('d-m-Y') . "
+Jatuh Tempo : " . $tagihan->jatuh_tempo_display . "
 
 Mohon segera melakukan pembayaran sebelum jatuh tempo.
 
@@ -67,7 +67,7 @@ PT PLN (Persero) ULP Way Halim";
 
                                 <tr>
                                     <th>Periode</th>
-                                    <td>{{ $tagihan->periode }}</td>
+                                    <td>{{ $periode }}</td>
                                 </tr>
 
                                 <tr>
@@ -77,7 +77,7 @@ PT PLN (Persero) ULP Way Halim";
 
                                 <tr>
                                     <th>Jatuh Tempo</th>
-                                    <td>{{ $tagihan->jatuh_tempo->format('d F Y') }}</td>
+                                    <td>{{ $tagihan->jatuh_tempo_display }}</td>
                                 </tr>
 
                             </table>

@@ -4,19 +4,47 @@
 
 @php
 
-$pesan = "Yth. {$tagihan->pelanggan->nama_pelanggan},
+$bulan = [
+    '01'=>'Januari',
+    '02'=>'Februari',
+    '03'=>'Maret',
+    '04'=>'April',
+    '05'=>'Mei',
+    '06'=>'Juni',
+    '07'=>'Juli',
+    '08'=>'Agustus',
+    '09'=>'September',
+    '10'=>'Oktober',
+    '11'=>'November',
+    '12'=>'Desember'
+];
 
-Kami mengingatkan bahwa tagihan listrik Anda dengan rincian berikut:
+$pecah = explode('-', $tagihan->periode);
+
+$periode = $bulan[$pecah[1]].' '.$pecah[0];
+
+$jatuhTempo = "20 ".$bulan[$pecah[1]]." ".$pecah[0];
+
+$pesan =
+"Yth. Bapak/Ibu {$tagihan->pelanggan->nama_pelanggan},
+
+Dengan hormat,
+
+Kami menginformasikan bahwa Anda memiliki tagihan listrik yang perlu segera dibayarkan dengan rincian sebagai berikut:
 
 ID Pelanggan : {$tagihan->pelanggan->id_pelanggan}
-Periode : {$tagihan->periode}
-Nominal : Rp " . number_format($tagihan->nominal,0,',','.') . "
-Jatuh Tempo : " . $tagihan->jatuh_tempo->format('d-m-Y') . "
+Periode Tagihan : {$periode}
+Nominal Tagihan : Rp " . number_format($tagihan->nominal,0,',','.') . "
+Jatuh Tempo : {$jatuhTempo}
 
-Mohon segera melakukan pembayaran sebelum jatuh tempo.
+Mohon untuk segera melakukan pembayaran sebelum tanggal jatuh tempo guna menghindari keterlambatan pembayaran serta menjaga kelancaran layanan kelistrikan.
 
-Terima kasih.
-PT PLN (Persero) ULP Way Halim";
+Atas perhatian dan kerja sama Bapak/Ibu, kami ucapkan terima kasih.
+
+Hormat kami,
+
+PT PLN (Persero)
+ULP Way Halim";
 
 @endphp
 
@@ -110,7 +138,7 @@ Periode
 
 <td>
 
-{{ $tagihan->periode }}
+{{ $periode }}
 
 </td>
 
@@ -142,7 +170,7 @@ Jatuh Tempo
 
 <td>
 
-{{ $tagihan->jatuh_tempo->format('d F Y') }}
+    {{ $tagihan->jatuh_tempo_display }}
 
 </td>
 

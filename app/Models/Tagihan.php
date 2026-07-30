@@ -38,4 +38,12 @@ class Tagihan extends Model
     {
         return $this->hasMany(RiwayatPengiriman::class);
     }
+
+    public function getJatuhTempoDisplayAttribute()
+    {
+        return $this->jatuh_tempo
+            ->copy()
+            ->day(20)
+            ->translatedFormat('d F Y');
+    }
 }

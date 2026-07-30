@@ -226,7 +226,7 @@
 
                     <td>
 
-                        {{ $tagihan->jatuh_tempo->format('d/m/Y') }}
+                        {{ $tagihan->jatuh_tempo_display }}
 
                     </td>
 
@@ -430,8 +430,17 @@ document.querySelectorAll('.btn-detail').forEach(function(btn){
             document.getElementById('d_nominal').textContent =
                 "Rp " + Number(data.nominal).toLocaleString('id-ID');
 
+            let tanggal = new Date(data.jatuh_tempo);
+
+            // Paksa tanggal menjadi 20
+            tanggal.setDate(20);
+
             document.getElementById('d_jatuh').textContent =
-                new Date(data.jatuh_tempo).toLocaleDateString('id-ID');
+                tanggal.toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
 
             document.getElementById('d_status').textContent =
                 data.status_pembayaran;

@@ -90,7 +90,7 @@
                         <tr>
                             <td class="fw-semibold">{{ $tagihan->periode }}</td>
                             <td>Rp {{ number_format($tagihan->nominal, 0, ',', '.') }}</td>
-                            <td>{{ \Carbon\Carbon::parse($tagihan->jatuh_tempo)->format('d M Y') }}</td>
+                            <td>{{ $tagihan->jatuh_tempo_display }}</td>
                             <td>
                                 <span class="badge rounded-pill px-3 {{ $tagihan->status_pembayaran == 'Lunas' ? 'text-bg-success' : 'text-bg-danger' }}">
                                     {{ $tagihan->status_pembayaran }}

@@ -195,88 +195,157 @@ class TagihanController extends Controller
     }
 
     public function reminder($id)
-    {
-        $tagihan = \App\Models\Tagihan::with('pelanggan')->findOrFail($id);
+{
+    $tagihan = Tagihan::with('pelanggan')->findOrFail($id);
 
-        $pesan =
-    "Yth. {$tagihan->pelanggan->nama_pelanggan},
+    $bulan = [
+        '01'=>'Januari',
+        '02'=>'Februari',
+        '03'=>'Maret',
+        '04'=>'April',
+        '05'=>'Mei',
+        '06'=>'Juni',
+        '07'=>'Juli',
+        '08'=>'Agustus',
+        '09'=>'September',
+        '10'=>'Oktober',
+        '11'=>'November',
+        '12'=>'Desember'
+    ];
 
-    Kami mengingatkan bahwa tagihan listrik Anda dengan rincian berikut:
+    $pecah = explode('-', $tagihan->periode);
 
-    ID Pelanggan : {$tagihan->pelanggan->id_pelanggan}
-    Periode : {$tagihan->periode}
-    Nominal : Rp " . number_format($tagihan->nominal,0,',','.') . "
-    Jatuh Tempo : " . $tagihan->jatuh_tempo->format('d-m-Y') . "
+    $periode = $bulan[$pecah[1]]." ".$pecah[0];
 
-    Mohon segera melakukan pembayaran sebelum jatuh tempo.
+    $jatuhTempo = "20 ".$bulan[$pecah[1]]." ".$pecah[0];
 
-    Terima kasih.
-    PT PLN (Persero) ULP Way Halim";
+    $pesan =
+"*Yth. Bapak/Ibu {$tagihan->pelanggan->nama_pelanggan},*
 
-        return view('tagihan.reminder', compact('tagihan','pesan'));
-    }
+Dengan hormat,
+
+Kami menginformasikan bahwa Anda memiliki *tagihan listrik yang perlu segera dibayarkan* dengan rincian sebagai berikut:
+
+*ID Pelanggan* : {$tagihan->pelanggan->id_pelanggan}
+*Periode Tagihan* : {$periode}
+*Nominal Tagihan* : Rp ".number_format($tagihan->nominal,0,',','.')."
+*Jatuh Tempo* : {$jatuhTempo}
+
+Mohon untuk segera melakukan pembayaran sebelum tanggal jatuh tempo guna menghindari keterlambatan pembayaran serta menjaga kelancaran layanan kelistrikan.
+
+Atas perhatian dan kerja sama Bapak/Ibu, kami ucapkan terima kasih.
+
+Hormat kami,
+
+*PT PLN (Persero)*
+*ULP Way Halim*";
+
+    return view(
+    'tagihan.reminder',
+    compact(
+        'tagihan',
+        'pesan',
+        'periode',
+        'jatuhTempo'
+    )
+);
+}
 
     public function sendReminder($id)
 {
     $tagihan = Tagihan::with('pelanggan')->findOrFail($id);
 
-    $nomor = $tagihan->pelanggan->nomor_whatsapp;
+    // Ambil nomor WA
+    $nomor = preg_replace('/[^0-9]/', '', $tagihan->pelanggan->nomor_whatsapp);
 
-    // ubah 08 menjadi 628
+    // Ubah 08 menjadi 628
     if (substr($nomor, 0, 1) == "0") {
         $nomor = "62" . substr($nomor, 1);
     }
 
-    $pesan = "Yth. {$tagihan->pelanggan->nama_pelanggan}\n\n";
-    $pesan .= "Kami mengingatkan bahwa tagihan listrik Anda.\n\n";
-    $pesan .= "Periode : {$tagihan->periode}\n";
-    $pesan .= "Nominal : Rp " . number_format($tagihan->nominal,0,',','.') . "\n";
-    $pesan .= "Jatuh Tempo : ".$tagihan->jatuh_tempo->format('d/m/Y')."\n\n";
-    $pesan .= "Mohon segera melakukan pembayaran.\n";
-    $pesan .= "Terima kasih.\n";
-    $pesan .= "PT PLN (Persero) ULP Way Halim";
+    // Nama bulan Indonesia
+    $bulan = [
+        '01'=>'Januari',
+        '02'=>'Februari',
+        '03'=>'Maret',
+        '04'=>'April',
+        '05'=>'Mei',
+        '06'=>'Juni',
+        '07'=>'Juli',
+        '08'=>'Agustus',
+        '09'=>'September',
+        '10'=>'Oktober',
+        '11'=>'November',
+        '12'=>'Desember'
+    ];
 
+    $pecah = explode('-', $tagihan->periode);
+
+    $periode =
+        $bulan[$pecah[1]] . " " . $pecah[0];
+
+    // Jatuh tempo selalu tanggal 20
+    $jatuhTempo = "20 " . $bulan[$pecah[1]] . " " . $pecah[0];
+
+    // Isi pesan
+    $pesan =
+"*Yth. Bapak/Ibu {$tagihan->pelanggan->nama_pelanggan},*
+
+Dengan hormat,
+
+Kami menginformasikan bahwa Anda memiliki *tagihan listrik yang perlu segera dibayarkan* dengan rincian sebagai berikut:
+
+*ID Pelanggan* : {$tagihan->pelanggan->id_pelanggan}
+*Periode Tagihan* : {$periode}
+*Nominal Tagihan* : Rp " . number_format($tagihan->nominal,0,',','.') . "
+*Jatuh Tempo* : {$jatuhTempo}
+
+Mohon untuk segera melakukan pembayaran sebelum tanggal jatuh tempo guna menghindari keterlambatan pembayaran serta menjaga kelancaran layanan kelistrikan.
+
+Atas perhatian dan kerja sama Bapak/Ibu, kami ucapkan terima kasih.
+
+Hormat kami,
+
+*PT PLN (Persero)*
+*ULP Way Halim*";
+
+    // Kirim ke Fonnte
     $response = Http::withHeaders([
         'Authorization' => env('FONNTE_TOKEN'),
-    ])->post('https://api.fonnte.com/send',[
+    ])->post('https://api.fonnte.com/send', [
         'target' => $nomor,
         'message' => $pesan,
     ]);
 
-    if($response->successful()){
+    $hasil = $response->json();
 
-        RiwayatPengiriman::create([
-            'pelanggan_id'=>$tagihan->pelanggan_id,
-            'tagihan_id'=>$tagihan->id,
-            'user_id'=>auth()->id(),
-            'template_nama'=>'Reminder PLN',
-            'isi_pesan'=>$pesan,
-            'status_pengiriman'=>'Berhasil',
-            'waktu_kirim'=>now(),
-            'response_code'=>$response->status(),
-            'response_message'=>'Berhasil dikirim',
-            'keterangan'=>'Fonnte'
-        ]);
-
-        return redirect()
-        ->route('tagihan.index')
-        ->with('success','Reminder berhasil dikirim.');
-    }
+    $berhasil =
+        $response->successful() &&
+        isset($hasil['status']) &&
+        $hasil['status'] == true;
 
     RiwayatPengiriman::create([
-        'pelanggan_id'=>$tagihan->pelanggan_id,
-        'tagihan_id'=>$tagihan->id,
-        'user_id'=>auth()->id(),
-        'template_nama'=>'Reminder PLN',
-        'isi_pesan'=>$pesan,
-        'status_pengiriman'=>'Gagal',
-        'waktu_kirim'=>now(),
-        'response_code'=>$response->status(),
-        'response_message'=>$response->body(),
-        'keterangan'=>'Fonnte'
+        'pelanggan_id' => $tagihan->pelanggan_id,
+        'tagihan_id' => $tagihan->id,
+        'user_id' => auth()->id(),
+        'template_nama' => 'Reminder PLN',
+        'isi_pesan' => $pesan,
+        'status_pengiriman' => $berhasil ? 'Berhasil' : 'Gagal',
+        'waktu_kirim' => now(),
+        'response_code' => $response->status(),
+        'response_message' => json_encode($hasil),
+        'keterangan' => 'Fonnte',
     ]);
 
-    return back()->with('error','Gagal mengirim reminder.');
+    if ($berhasil) {
+        return redirect()
+            ->route('tagihan.index')
+            ->with('success', 'Reminder berhasil dikirim.');
+    }
+
+    return redirect()
+        ->route('tagihan.index')
+        ->with('error', 'Reminder gagal dikirim.');
 }
 
     /**

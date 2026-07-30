@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pelanggan;
 use App\Models\Tagihan;
+use App\Models\RiwayatPengiriman;
 use App\Imports\PelangganImport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -88,6 +89,7 @@ class PelangganController extends Controller
 
     public function destroy(Pelanggan $pelanggan)
     {
+        RiwayatPengiriman::where('pelanggan_id', $pelanggan->id)->delete();
         Tagihan::where('pelanggan_id', $pelanggan->id)->delete();
 
         $pelanggan->delete();

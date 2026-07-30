@@ -30,13 +30,15 @@
                     <p class="fw-bold mb-0 mt-1 fs-6">{{ $pelanggan->daya ? $pelanggan->daya . ' VA' : '-' }}</p>
                 </div>
                 <div class="p-3">
-                    <small class="text-muted text-uppercase fw-semibold" style="font-size:0.7rem;letter-spacing:.05em;">Status</small>
-                    <p class="mb-0 mt-1">
-                        <span class="badge rounded-pill px-3 py-2 {{ $pelanggan->status_pelanggan == 'Aktif' ? 'text-bg-success' : 'text-bg-secondary' }}">
-                            {{ $pelanggan->status_pelanggan }}
-                        </span>
-                    </p>
-                </div>
+                <small class="text-muted text-uppercase fw-semibold" style="font-size:0.7rem;letter-spacing:.05em;">Nominal Tagihan</small>
+                <p class="fw-bold mb-0 mt-1 fs-6">
+                     @if($tagihans->isNotEmpty())
+                 Rp {{ number_format($tagihans->first()->nominal, 0, ',', '.') }}
+                @else
+             <span class="text-muted small">Belum ada tagihan</span>
+        @endif
+    </p>
+</div>
             </div>
             <div class="col-md-6">
                 <div class="p-3 border-bottom">

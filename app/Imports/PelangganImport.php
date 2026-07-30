@@ -7,7 +7,6 @@ use App\Models\Tagihan;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Collection;
-use Carbon\Carbon;
 
 class PelangganImport implements ToCollection, WithHeadingRow
 {
@@ -37,31 +36,18 @@ class PelangganImport implements ToCollection, WithHeadingRow
                 $this->updatedCount++;
             }
 
+            
             Tagihan::updateOrCreate(
                 [
                     'pelanggan_id' => $pelanggan->id,
-                    'periode' => now()->format('Y-m'),
+                    'periode'      => now()->format('Y-m'),
                 ],
                 [
-                    'nominal' => 0,
-                    'jatuh_tempo' => now()->endOfMonth(),
+                    'nominal'           => $row['nominal'] ?? 0,
+                    'jatuh_tempo'       => now()->endOfMonth(),
                     'status_pembayaran' => 'Belum Bayar',
-                    'tanggal_import' => now(),
-                    'keterangan' => null,
-                ]
-            );
-
-            Tagihan::firstOrCreate(
-                [
-                    'pelanggan_id' => $pelanggan->id,
-                ],
-                [
-                    'periode' => now()->format('Y-m'),
-                    'nominal' => 0,
-                    'jatuh_tempo' => now()->endOfMonth(),
-                    'status_pembayaran' => 'Belum Bayar',
-                    'tanggal_import' => now(),
-                    'keterangan' => null,
+                    'tanggal_import'    => now(),
+                    'keterangan'        => null,
                 ]
             );
         }

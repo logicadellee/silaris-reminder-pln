@@ -19,9 +19,9 @@ body{
 =========================== */
 
 :root{
-    --sidebar-width:300px;
-    --navbar-height:72px;
-    --content-max:1600px;
+    --sidebar-width:260px;
+    --navbar-height:64px;
+    --content-max:1360px;
 }
 
 body{
@@ -29,8 +29,8 @@ body{
 }
 
 .app-content{
-    margin-left:300px;
-    width:calc(100% - 300px);
+    margin-left:260px;
+    width:calc(100% - 260px);
     min-height:100vh;
     background:#f4f7fb;
     display:flex;
@@ -40,9 +40,9 @@ body{
 
 .content-wrapper{
     width:100%;
-    max-width:1600px;
+    max-width:1360px;
     margin:0 auto;
-    padding:24px;
+    padding:18px 22px;
 }
 
 .app-footer{
@@ -57,7 +57,7 @@ body{
 
 .card{
     border:none;
-    border-radius:18px;
+    border-radius:14px;
     box-shadow:0 8px 25px rgba(0,0,0,.05);
     margin-bottom:28px;
 }
@@ -87,7 +87,8 @@ body{
 .form-control,
 .form-select{
     border-radius:12px;
-    height:46px;
+    height:42px;
+    font-size:14px;
 }
 
 /* ===========================
@@ -109,8 +110,8 @@ body{
 
 .stat-card{
     border-radius:18px;
-    padding:18px 22px;
-    min-height:70px;
+    padding:16px 18px;
+    min-height:64px;
     display:flex;
     justify-content:space-between;
     align-items:center;
@@ -175,7 +176,7 @@ body{
 }
 
 .stat-number{
-    font-size:34px;
+    font-size:28px;
     font-weight:700;
     margin-top:10px;
     margin-bottom:12px;
@@ -187,9 +188,9 @@ body{
 }
 
 .stat-icon{
-    width:48px;
-    height:48px;
-    font-size:22px;
+    width:42px;
+    height:42px;
+    font-size:18px;
     border-radius:50%;
     display:flex;
     justify-content:center;
@@ -202,7 +203,7 @@ body{
 
     font-weight:700;
 
-    font-size:22px;
+    font-size:18px;
 
     background:white;
 
@@ -245,7 +246,7 @@ body{
     position:fixed;
     top:0;
     left:0;
-    width:300px;
+    width:260px;
     height:100vh;
     background:#0057B8;
     display:flex;
@@ -267,13 +268,13 @@ body{
 }
 
 .logo-pln{
-    width:64px;
+    width:52px;
 
     margin-bottom:12px;
 }
 
 .sidebar-header h3{
-    font-size:24px;
+    font-size:20px;
 
     font-weight:700;
 
@@ -301,7 +302,7 @@ body{
     gap:14px;
 
     width:100%;
-    height:52px;
+    height:46px;
 
     padding:0 18px;
 
@@ -310,7 +311,7 @@ body{
 
     border-radius:14px;
 
-    font-size:15px;
+    font-size:14px;
     font-weight:500;
 
     transition:.25s;
@@ -509,8 +510,8 @@ body{
     background:#f8fafc;
     color:#334155;
     border-bottom:2px solid #0d6efd;
-    padding:16px 14px;
-    font-size:14px;
+    padding:12px;
+    font-size:12px;
     font-weight:600;
     text-align:center;
     vertical-align:middle;
@@ -531,7 +532,7 @@ body{
 }
 
 .table tbody td{
-    padding:12px 14px;
+    padding:10px;
     text-align:center;
     vertical-align:middle;
 }
@@ -543,14 +544,14 @@ body{
 }
 
 .btn-sm{
-    min-width:130px;
-    height:36px;
+    min-width:105px;
+    height:34px;
     border-radius:30px;
     display:flex;
     justify-content:center;
     align-items:center;
     gap:6px;
-    font-size:14px;
+    font-size:12px;
 }
 
 .table tbody tr:hover{
@@ -580,8 +581,8 @@ body{
     }
 
     .app-content{
-        margin-left:var(--sidebar-width);
-        width:calc(100% - var(--sidebar-width));
+        margin-left:var(260px);
+        width:calc(100% - var(100% - 260px));
     }
 
 }
@@ -640,9 +641,9 @@ body{
 
     .content-wrapper{
         width:100%;
-        max-width:1600px;
+        max-width:1360px;
         margin:auto;
-        padding:28px;
+        padding:20px;
     }
 
 }

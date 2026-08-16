@@ -41,7 +41,6 @@
 
         <div class="card shadow-sm border-0 rounded-3 mb-3">
 
-    <!-- <div class="card-body"> -->
         <div class="content-wrapper tagihan-page">
         <h6 class="fw-bold text-primary mb-4">
             <i class="bi bi-funnel-fill"></i>
@@ -60,6 +59,7 @@
                         type="text"
                         class="form-control"
                         name="search"
+                        value="{{ request('search') }}"
                         placeholder="ID Pelanggan / Nama Pelanggan">
 
                 </div>
@@ -72,15 +72,15 @@
 
                         <option value="">Semua Reminder</option>
 
-                        <option value="Belum">
+                        <option value="Belum" {{ request('status_reminder')=='Belum' ? 'selected' : '' }}>
                             Belum Pernah Dikirim
                         </option>
 
-                        <option value="Berhasil">
+                        <option value="Berhasil" {{ request('status_reminder')=='Berhasil' ? 'selected' : '' }}>
                             Berhasil
                         </option>
 
-                        <option value="Gagal">
+                        <option value="Gagal" {{ request('status_reminder')=='Gagal' ? 'selected' : '' }}>
                             Gagal
                         </option>
 
@@ -95,7 +95,8 @@
                     <input
                         type="month"
                         class="form-control"
-                        name="periode">
+                        name="periode"
+                        value="{{ request('periode') }}">
 
                 </div>
 
@@ -137,23 +138,19 @@
 
         {{-- Tabel --}}
 
-        <form
-        action="{{ route('tagihan.send.bulk') }}"
-        method="POST">
-
-        @csrf
-
         <div class="card border-0 shadow-sm">
 
-        <div class="card-header bg-white">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center flex-wrap gap-2">
 
-        <h5 class="mb-0 fw-semibold">
+            <h5 class="mb-0 fw-semibold">
+                Daftar Tagihan Pelanggan
+            </h5>
 
-            Daftar Tagihan Pelanggan
+            <span id="selectedBadge" class="selected-notification d-none">
+                0 Terpilih
+            </span>
 
-        </h5>
-
-    </div>
+        </div>
 
     <div class="table-responsive">
 
@@ -343,140 +340,13 @@
 
             </div>
 
-        </form>
-
     </div>
 
 </div>
 
-<script>
+</div>
 
-document.getElementById('btnBulkReminder').addEventListener('click', function () {
-
-    let checked = document.querySelectorAll('.check-item:checked');
-
-    if (checked.length === 0) {
-
-        alert('Pilih minimal satu tagihan.');
-
-        return;
-    }
-
-    let form = document.createElement('form');
-
-    form.method = 'POST';
-
-    form.action = "{{ route('tagihan.send.bulk') }}";
-
-    // CSRF
-    let token = document.createElement('input');
-
-    token.type = 'hidden';
-
-    token.name = '_token';
-
-    token.value = "{{ csrf_token() }}";
-
-    form.appendChild(token);
-
-    checked.forEach(function(item){
-
-        let input = document.createElement('input');
-
-        input.type = 'hidden';
-
-        input.name = 'tagihan[]';
-
-        input.value = item.value;
-
-        form.appendChild(input);
-
-    });
-
-    document.body.appendChild(form);
-
-    form.submit();
-
-});
-
-</script>
-
-<script>
-document.querySelectorAll('.btn-detail').forEach(function(btn){
-
-    btn.addEventListener('click', function(){
-
-        let id = this.dataset.id;
-
-        fetch('/tagihan/' + id)
-        .then(response => response.json())
-        .then(data => {
-
-            document.getElementById('d_idpel').textContent =
-                data.pelanggan.id_pelanggan;
-
-            document.getElementById('d_nama').textContent =
-                data.pelanggan.nama_pelanggan;
-
-            document.getElementById('d_wa').textContent =
-                data.pelanggan.nomor_whatsapp ?? '-';
-
-            document.getElementById('d_alamat').textContent =
-                data.pelanggan.alamat ?? '-';
-
-            document.getElementById('d_periode').textContent =
-                data.periode;
-
-            document.getElementById('d_nominal').textContent =
-                "Rp " + Number(data.nominal).toLocaleString('id-ID');
-
-            let tanggal = new Date(data.jatuh_tempo);
-
-            // Paksa tanggal menjadi 20
-            tanggal.setDate(20);
-
-            document.getElementById('d_jatuh').textContent =
-                tanggal.toLocaleDateString('id-ID', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric'
-                });
-
-            document.getElementById('d_status').textContent =
-                data.status_pembayaran;
-
-            const modalEl = document.getElementById('detailModal');
-
-            const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-
-            modal.show();
-
-        })
-        .catch(error => {
-            console.error(error);
-            alert('Gagal mengambil data.');
-        });
-
-    });
-
-});
-</script>
-
-<script>
-
-const detailModal = document.getElementById('detailModal');
-
-detailModal.addEventListener('hidden.bs.modal', function () {
-
-    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
-
-    document.body.classList.remove('modal-open');
-
-    document.body.style.removeProperty('padding-right');
-
-});
-
-</script>
+{{-- MODAL DETAIL --}}
 
 <div class="modal fade"
     id="detailModal"
@@ -569,34 +439,207 @@ detailModal.addEventListener('hidden.bs.modal', function () {
 
 </div>
 
+
+{{-- SCRIPT DETAIL MODAL --}}
+
+<script>
+document.querySelectorAll('.btn-detail').forEach(function(btn){
+
+    btn.addEventListener('click', function(){
+
+        let id = this.dataset.id;
+
+        fetch('/tagihan/' + id)
+        .then(response => response.json())
+        .then(data => {
+
+            document.getElementById('d_idpel').textContent =
+                data.pelanggan.id_pelanggan;
+
+            document.getElementById('d_nama').textContent =
+                data.pelanggan.nama_pelanggan;
+
+            document.getElementById('d_wa').textContent =
+                data.pelanggan.nomor_whatsapp ?? '-';
+
+            document.getElementById('d_alamat').textContent =
+                data.pelanggan.alamat ?? '-';
+
+            document.getElementById('d_periode').textContent =
+                data.periode;
+
+            document.getElementById('d_nominal').textContent =
+                "Rp " + Number(data.nominal).toLocaleString('id-ID');
+
+            let tanggal = new Date(data.jatuh_tempo);
+            tanggal.setDate(20);
+
+            document.getElementById('d_jatuh').textContent =
+                tanggal.toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+
+            document.getElementById('d_status').textContent =
+                data.status_pembayaran;
+
+            const modalEl = document.getElementById('detailModal');
+            const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+            modal.show();
+
+        })
+        .catch(error => {
+            console.error(error);
+            alert('Gagal mengambil data.');
+        });
+
+    });
+
+});
+
+const detailModal = document.getElementById('detailModal');
+
+detailModal.addEventListener('hidden.bs.modal', function () {
+    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+    document.body.classList.remove('modal-open');
+    document.body.style.removeProperty('padding-right');
+});
+</script>
+
+
+{{-- CHECKLIST PERSISTEN + BADGE + BULK REMINDER --}}
+
 <script>
 
-const checkAll = document.getElementById('checkAll');
-const checkItems = document.querySelectorAll('.check-item');
+const STORAGE_KEY = 'tagihan_selected_ids';
 
-// Klik checkbox header
+const checkAll   = document.getElementById('checkAll');
+const checkItems = document.querySelectorAll('.check-item');
+const badge      = document.getElementById('selectedBadge');
+
+function getSelectedIds() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+}
+
+function saveSelectedIds(ids) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+}
+
+function addSelectedId(id) {
+    let ids = getSelectedIds();
+    if (!ids.includes(id)) {
+        ids.push(id);
+        saveSelectedIds(ids);
+    }
+}
+
+function removeSelectedId(id) {
+    saveSelectedIds(getSelectedIds().filter(x => x !== id));
+}
+
+function updateBadge() {
+    const count = getSelectedIds().length;
+
+    if (count > 0) {
+        badge.textContent = count + ' Terpilih';
+        badge.classList.remove('d-none');
+    } else {
+        badge.classList.add('d-none');
+    }
+}
+
+function syncCheckAll() {
+    const total   = checkItems.length;
+    const checked = document.querySelectorAll('.check-item:checked').length;
+
+    checkAll.checked = total > 0 && total === checked;
+}
+
+// saat halaman dimuat / setelah pencarian baru:
+// centang ulang checkbox yang ID-nya ada di localStorage
+function restoreCheckedState() {
+    const ids = getSelectedIds();
+
+    checkItems.forEach(item => {
+        item.checked = ids.includes(item.value);
+    });
+
+    syncCheckAll();
+}
+
+// klik checkbox header (pilih semua di halaman ini)
 checkAll.addEventListener('change', function () {
 
     checkItems.forEach(item => {
         item.checked = this.checked;
+
+        if (this.checked) {
+            addSelectedId(item.value);
+        } else {
+            removeSelectedId(item.value);
+        }
     });
 
+    updateBadge();
 });
 
-// Jika salah satu checkbox di-uncheck,
-// checkbox header ikut berubah
+// klik checkbox per baris
 checkItems.forEach(item => {
 
     item.addEventListener('change', function () {
 
-        const total = checkItems.length;
-        const checked = document.querySelectorAll('.check-item:checked').length;
+        if (this.checked) {
+            addSelectedId(this.value);
+        } else {
+            removeSelectedId(this.value);
+        }
 
-        checkAll.checked = (total === checked);
-
+        syncCheckAll();
+        updateBadge();
     });
 
 });
+
+//tombol "Kirim Reminder" -> kirim semua id tersimpan
+document.getElementById('btnBulkReminder').addEventListener('click', function () {
+
+    let ids = getSelectedIds();
+
+    if (ids.length === 0) {
+        alert('Pilih minimal satu tagihan.');
+        return;
+    }
+
+    let form = document.createElement('form');
+    form.method = 'POST';
+    form.action = "{{ route('tagihan.send.bulk') }}";
+
+    let token = document.createElement('input');
+    token.type  = 'hidden';
+    token.name  = '_token';
+    token.value = "{{ csrf_token() }}";
+    form.appendChild(token);
+
+    ids.forEach(function (id) {
+        let input = document.createElement('input');
+        input.type  = 'hidden';
+        input.name  = 'tagihan[]';
+        input.value = id;
+        form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+
+    // Bersihkan penyimpanan setelah dipakai
+    localStorage.removeItem(STORAGE_KEY);
+
+    form.submit();
+});
+
+// Jalankan saat halaman dimuat
+restoreCheckedState();
+updateBadge();
 
 </script>
 

@@ -35,6 +35,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/tagihan/{id}/send', [TagihanController::class, 'sendReminder'])
         ->name('tagihan.send');
 
+    Route::post('/tagihan/{id}/send-ajax', [TagihanController::class, 'sendReminderAjax'])
+    ->name('tagihan.send.ajax');
+
     Route::resource('reminder', ReminderController::class);
 
     Route::resource('riwayat', RiwayatController::class);

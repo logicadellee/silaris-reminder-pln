@@ -13,9 +13,7 @@
 
         <div class="preview-wrapper">
 
-            {{-- =====================================================
-                 CARD UTAMA
-            ====================================================== --}}
+            {{-- CARD UTAMA--}}
 
             <div class="card preview-card shadow-sm border-0">
 
@@ -90,11 +88,9 @@ Hormat kami,
                         @endphp
 
 
-                        {{-- =====================================================
-                             CARD SETIAP PELANGGAN
-                        ====================================================== --}}
+                        {{-- CARD SETIAP PELANGGAN --}}
 
-                        <div class="preview-customer-card">
+                        <div class="preview-customer-card" data-tagihan-id="{{ $tagihan->id }}">
 
 
                             {{-- IDENTITAS PELANGGAN --}}
@@ -120,54 +116,23 @@ Hormat kami,
                                 <table class="preview-data-table">
 
                                     <tr>
-
-                                        <th>
-                                            Nomor WhatsApp
-                                        </th>
-
-                                        <td>
-                                            {{ $tagihan->pelanggan->nomor_whatsapp }}
-                                        </td>
-
+                                        <th>Nomor WhatsApp</th>
+                                        <td>{{ $tagihan->pelanggan->nomor_whatsapp }}</td>
                                     </tr>
 
-
                                     <tr>
-
-                                        <th>
-                                            Periode
-                                        </th>
-
-                                        <td>
-                                            {{ $periode }}
-                                        </td>
-
+                                        <th>Periode</th>
+                                        <td>{{ $periode }}</td>
                                     </tr>
 
-
                                     <tr>
-
-                                        <th>
-                                            Nominal
-                                        </th>
-
-                                        <td>
-                                            Rp {{ number_format($tagihan->nominal, 0, ',', '.') }}
-                                        </td>
-
+                                        <th>Nominal</th>
+                                        <td>Rp {{ number_format($tagihan->nominal, 0, ',', '.') }}</td>
                                     </tr>
 
-
                                     <tr>
-
-                                        <th>
-                                            Jatuh Tempo
-                                        </th>
-
-                                        <td>
-                                            {{ $jatuhTempo }}
-                                        </td>
-
+                                        <th>Jatuh Tempo</th>
+                                        <td>{{ $jatuhTempo }}</td>
                                     </tr>
 
                                 </table>
@@ -177,47 +142,27 @@ Hormat kami,
 
                                 <div class="preview-message-section">
 
-                                    <h6>
-                                        Preview Pesan
-                                    </h6>
+                                    <h6>Preview Pesan</h6>
 
                                     <hr>
 
-
                                     <div class="whatsapp-preview">
-
                                         <div class="whatsapp-message">
-
                                             {{ $pesan }}
-
                                         </div>
-
                                     </div>
 
                                 </div>
 
 
-                                {{-- BUTTON KIRIM --}}
+                                {{-- STATUS PENGIRIMAN --}}
 
-                                <form
-                                    action="{{ route('tagihan.send', $tagihan->id) }}"
-                                    method="POST"
-                                    class="preview-send-form">
-
-                                    @csrf
-
-                                    <button
-                                        type="submit"
-                                        class="btn btn-success">
-
-                                        <i class="bi bi-whatsapp"></i>
-
-                                        Kirim WhatsApp ke
-                                        {{ $tagihan->pelanggan->nama_pelanggan }}
-
-                                    </button>
-
-                                </form>
+                                <div class="preview-send-status" id="status-{{ $tagihan->id }}">
+                                    <span class="preview-status-badge status-waiting">
+                                        <i class="bi bi-clock"></i>
+                                        Menunggu Dikirim
+                                    </span>
+                                </div>
 
 
                             </div>
@@ -235,15 +180,28 @@ Hormat kami,
 
                 <div class="preview-card-footer">
 
-                    <a
-                        href="{{ route('tagihan.index') }}"
-                        class="btn btn-secondary">
-
+                    <a href="{{ route('tagihan.index') }}" class="btn-preview-back">
                         <i class="bi bi-arrow-left"></i>
-
                         Kembali
-
                     </a>
+
+                    <div class="preview-send-controls">
+
+                        <small id="sendProgress" class="preview-progress-text"></small>
+
+                        <button
+                            type="button"
+                            id="btnSendAll"
+                            class="btn-preview-send"
+                            data-ids='{{ $tagihans->pluck('id')->toJson() }}'>
+
+                            <i class="bi bi-send-fill"></i>
+                            Kirim Semua Pesan
+                            <span class="btn-preview-send-count">{{ $tagihans->count() }}</span>
+
+                        </button>
+
+                    </div>
 
                 </div>
 
@@ -253,5 +211,113 @@ Hormat kami,
         </div>
 
     </div>
+
+
+    {{-- KIRIM SATU PER SATU --}}
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const btnSendAll = document.getElementById('btnSendAll');
+
+        if (!btnSendAll) return;
+
+        const ids = JSON.parse(btnSendAll.dataset.ids || '[]');
+        const progressText = document.getElementById('sendProgress');
+        const csrfToken = "{{ csrf_token() }}";
+
+        function setStatus(id, state, text) {
+
+            const el = document.getElementById('status-' + id);
+
+            if (!el) return;
+
+            let stateClass = 'status-waiting';
+            let icon = 'bi-clock';
+
+            if (state === 'sending') {
+                stateClass = 'status-sending';
+                icon = 'bi-arrow-repeat';
+            } else if (state === 'success') {
+                stateClass = 'status-success';
+                icon = 'bi-check-circle';
+            } else if (state === 'failed') {
+                stateClass = 'status-failed';
+                icon = 'bi-x-circle';
+            }
+
+            el.innerHTML =
+                '<span class="preview-status-badge ' + stateClass + '"><i class="bi ' + icon + '"></i> ' + text + '</span>';
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function randomDelay() {
+            return Math.floor(Math.random() * 4000) + 1000;
+        }
+
+        async function sendOne(id) {
+
+            setStatus(id, 'sending', 'Mengirim...');
+
+            try {
+
+                const res = await fetch(`/tagihan/${id}/send-ajax`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                    },
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    setStatus(id, 'success', 'Terkirim');
+                } else {
+                    setStatus(id, 'failed', 'Gagal');
+                }
+
+            } catch (err) {
+
+                console.error(err);
+                setStatus(id, 'failed', 'Gagal');
+
+            }
+        }
+
+        btnSendAll.addEventListener('click', async function () {
+
+            if (ids.length === 0) return;
+
+            btnSendAll.disabled = true;
+            btnSendAll.innerHTML = '<i class="bi bi-hourglass-split"></i> Mengirim...';
+
+            for (let i = 0; i < ids.length; i++) {
+
+                if (progressText) {
+                    progressText.textContent =
+                        `Mengirim pesan ${i + 1} dari ${ids.length}...`;
+                }
+
+                await sendOne(ids[i]);
+
+                if (i < ids.length - 1) {
+                    await delay(randomDelay());
+                }
+            }
+
+            if (progressText) {
+                progressText.textContent = 'Semua pesan selesai diproses.';
+            }
+
+            btnSendAll.innerHTML = '<i class="bi bi-check2-all"></i> Selesai Dikirim';
+
+        });
+
+    });
+    </script>
 
 </x-app-layout>

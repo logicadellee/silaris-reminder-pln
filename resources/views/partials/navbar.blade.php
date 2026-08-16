@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-white shadow-sm rounded-3 px-3 py-2 mb-3">
+<nav class="navbar top-navbar px-3 py-2 mb-3">
 
     <div class="container-fluid">
 
@@ -22,7 +22,7 @@
 
                 <div
                     class="rounded-circle bg-primary d-flex justify-content-center align-items-center text-white fw-bold"
-                    style="width:42px;height:42px;font-size:18px;">
+                    style="width:38px;height:38px;font-size:16px;">
 
                     <i class="bi bi-person-fill"></i>
 
@@ -31,12 +31,8 @@
                 <div class="ms-3">
 
                     <h6 class="mb-0 fw-semibold">
-                        Administrator
+                        Admin SiLaris
                     </h6>
-
-                    <small class="text-muted">
-                        Admin SILARIS
-                    </small>
 
                 </div>
 

@@ -2,11 +2,11 @@
 
     <x-slot name="header">
 
-        <h2 class="fw-bold mb-0">
+        <h3 class="fw-bold mb-0">
 
             Data Tagihan
 
-        </h2>
+        </h3>
 
     </x-slot>
 
@@ -41,12 +41,12 @@
 
         <div class="card shadow-sm border-0 rounded-3 mb-3">
 
-    <div class="card-body">
-
-        <h5 class="fw-bold text-primary mb-4">
+    <!-- <div class="card-body"> -->
+        <div class="content-wrapper tagihan-page">
+        <h6 class="fw-bold text-primary mb-4">
             <i class="bi bi-funnel-fill"></i>
             Filter Data
-        </h5>
+        </h6>
 
         <form action="{{ route('tagihan.index') }}" method="GET">
 

@@ -720,12 +720,6 @@
 
         </div>
 
-        <div class="scroll-indicator">
-
-            Scroll
-
-        </div>
-
     </section>
 
     <section class="section">

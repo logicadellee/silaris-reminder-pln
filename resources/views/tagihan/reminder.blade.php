@@ -1,31 +1,31 @@
 <x-app-layout>
 
-<div class="container-fluid">
+    <div class="container-fluid">
 
-@php
+        @php
 
-$bulan = [
-    '01'=>'Januari',
-    '02'=>'Februari',
-    '03'=>'Maret',
-    '04'=>'April',
-    '05'=>'Mei',
-    '06'=>'Juni',
-    '07'=>'Juli',
-    '08'=>'Agustus',
-    '09'=>'September',
-    '10'=>'Oktober',
-    '11'=>'November',
-    '12'=>'Desember'
-];
+            $bulan = [
+                '01' => 'Januari',
+                '02' => 'Februari',
+                '03' => 'Maret',
+                '04' => 'April',
+                '05' => 'Mei',
+                '06' => 'Juni',
+                '07' => 'Juli',
+                '08' => 'Agustus',
+                '09' => 'September',
+                '10' => 'Oktober',
+                '11' => 'November',
+                '12' => 'Desember'
+            ];
 
-$pecah = explode('-', $tagihan->periode);
+            $pecah = explode('-', $tagihan->periode);
 
-$periode = $bulan[$pecah[1]].' '.$pecah[0];
+            $periode = $bulan[$pecah[1]] . ' ' . $pecah[0];
 
-$jatuhTempo = "20 ".$bulan[$pecah[1]]." ".$pecah[0];
+            $jatuhTempo = '20 ' . $bulan[$pecah[1]] . ' ' . $pecah[0];
 
-$pesan =
+            $pesan =
 "Yth. Bapak/Ibu {$tagihan->pelanggan->nama_pelanggan},
 
 Dengan hormat,
@@ -34,7 +34,7 @@ Kami menginformasikan bahwa Anda memiliki tagihan listrik yang perlu segera diba
 
 ID Pelanggan : {$tagihan->pelanggan->id_pelanggan}
 Periode Tagihan : {$periode}
-Nominal Tagihan : Rp " . number_format($tagihan->nominal,0,',','.') . "
+Nominal Tagihan : Rp " . number_format($tagihan->nominal, 0, ',', '.') . "
 Jatuh Tempo : {$jatuhTempo}
 
 Mohon untuk segera melakukan pembayaran sebelum tanggal jatuh tempo guna menghindari keterlambatan pembayaran serta menjaga kelancaran layanan kelistrikan.
@@ -46,257 +46,166 @@ Hormat kami,
 PT PLN (Persero)
 ULP Way Halim";
 
-@endphp
+        @endphp
 
-<div class="row">
 
-<div class="col-lg-8">
+        {{-- =====================================================
+             PREVIEW 1 PELANGGAN
+        ====================================================== --}}
 
-<div class="card shadow-sm border-0 rounded-4">
+        <div class="preview-wrapper">
 
-<div class="card-header bg-primary text-white">
+            <div class="card preview-card shadow-sm border-0">
 
-<h4 class="mb-0">
 
-<i class="bi bi-whatsapp"></i>
+                {{-- HEADER --}}
+                <div class="preview-card-header">
 
-Preview Reminder WhatsApp
+                    <h4>
+                        <i class="bi bi-whatsapp"></i>
+                        Preview Reminder WhatsApp
+                    </h4>
 
-</h4>
+                </div>
 
-</div>
 
-<div class="card-body">
+                {{-- BODY --}}
+                <div class="preview-card-body">
 
-<div class="mb-4">
 
-<h6 class="fw-bold">
+                    {{-- DATA PELANGGAN --}}
+                    <div class="preview-data-section">
 
-Data Pelanggan
+                        <h6>
+                            Data Pelanggan
+                        </h6>
 
-</h6>
+                        <hr>
 
-<hr>
 
-<table class="table table-borderless">
+                        <table class="preview-data-table">
 
-<tr>
+                            <tr>
+                                <th>Nama</th>
 
-<th width="180">
+                                <td>
+                                    {{ $tagihan->pelanggan->nama_pelanggan }}
+                                </td>
+                            </tr>
 
-Nama
 
-</th>
+                            <tr>
+                                <th>ID Pelanggan</th>
 
-<td>
+                                <td>
+                                    {{ $tagihan->pelanggan->id_pelanggan }}
+                                </td>
+                            </tr>
 
-{{ $tagihan->pelanggan->nama_pelanggan }}
 
-</td>
+                            <tr>
+                                <th>Nomor WhatsApp</th>
 
-</tr>
+                                <td>
+                                    {{ $tagihan->pelanggan->nomor_whatsapp }}
+                                </td>
+                            </tr>
 
-<tr>
 
-<th>
+                            <tr>
+                                <th>Periode</th>
 
-ID Pelanggan
+                                <td>
+                                    {{ $periode }}
+                                </td>
+                            </tr>
 
-</th>
 
-<td>
+                            <tr>
+                                <th>Nominal</th>
 
-{{ $tagihan->pelanggan->id_pelanggan }}
+                                <td>
+                                    Rp {{ number_format($tagihan->nominal, 0, ',', '.') }}
+                                </td>
+                            </tr>
 
-</td>
 
-</tr>
+                            <tr>
+                                <th>Jatuh Tempo</th>
 
-<tr>
+                                <td>
+                                    {{ $tagihan->jatuh_tempo_display ?? $jatuhTempo }}
+                                </td>
+                            </tr>
 
-<th>
+                        </table>
 
-Nomor WhatsApp
+                    </div>
 
-</th>
 
-<td>
+                    {{-- PREVIEW PESAN --}}
+                    <div class="preview-message-section">
 
-{{ $tagihan->pelanggan->nomor_whatsapp }}
+                        <h6>
+                            Preview Pesan
+                        </h6>
 
-</td>
+                        <hr>
 
-</tr>
 
-<tr>
+                        <div class="whatsapp-preview">
 
-<th>
+                            <div class="whatsapp-message">
 
-Periode
+                                {{ $pesan }}
 
-</th>
+                            </div>
 
-<td>
+                        </div>
 
-{{ $periode }}
+                    </div>
 
-</td>
 
-</tr>
+                </div>
 
-<tr>
 
-<th>
+                {{-- FOOTER --}}
+                <div class="preview-card-footer">
 
-Nominal
+                    <a
+                        href="{{ route('tagihan.index') }}"
+                        class="btn btn-secondary">
 
-</th>
+                        <i class="bi bi-arrow-left"></i>
+                        Kembali
 
-<td>
+                    </a>
 
-Rp {{ number_format($tagihan->nominal,0,',','.') }}
 
-</td>
+                    <form
+                        action="{{ route('tagihan.send', $tagihan->id) }}"
+                        method="POST">
 
-</tr>
+                        @csrf
 
-<tr>
+                        <button
+                            type="submit"
+                            class="btn btn-success">
 
-<th>
+                            <i class="bi bi-whatsapp"></i>
+                            Kirim WhatsApp
 
-Jatuh Tempo
+                        </button>
 
-</th>
+                    </form>
 
-<td>
+                </div>
 
-    {{ $tagihan->jatuh_tempo_display }}
 
-</td>
+            </div>
 
-</tr>
+        </div>
 
-</table>
-
-</div>
-
-<h6 class="fw-bold">
-
-Preview Pesan
-
-</h6>
-
-<hr>
-
-<div
-style="
-background:#e5ddd5;
-padding:25px;
-border-radius:15px;">
-
-<div
-style="
-background:white;
-padding:20px;
-border-radius:12px;
-white-space:pre-line;
-font-size:15px;
-line-height:1.7;">
-
-{{ $pesan }}
-
-</div>
-
-</div>
-
-</div>
-
-<div class="card-footer bg-white d-flex justify-content-between">
-
-<a
-href="{{ route('tagihan.index') }}"
-class="btn btn-secondary">
-
-<i class="bi bi-arrow-left"></i>
-
-Kembali
-
-</a>
-
-<form action="{{ route('tagihan.send',$tagihan->id) }}"
-        method="POST">
-
-    @csrf
-
-    <button class="btn btn-success">
-        <i class="bi bi-whatsapp"></i>
-        Kirim WhatsApp
-    </button>
-
-</form>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="col-lg-4">
-
-<div class="card border-0 shadow-sm rounded-4">
-
-<div class="card-body text-center">
-
-<i
-class="bi bi-phone-fill text-success"
-style="font-size:90px"></i>
-
-<h5 class="mt-3">
-
-WhatsApp Gateway
-
-</h5>
-
-<p class="text-muted">
-
-Pesan akan dikirim ke nomor pelanggan melalui WhatsApp.
-
-</p>
-
-<hr>
-
-<p>
-
-Status Tagihan
-
-</p>
-
-@if($tagihan->status_pembayaran=="Belum Bayar")
-
-<span class="badge bg-warning fs-6">
-
-Belum Bayar
-
-</span>
-
-@else
-
-<span class="badge bg-success fs-6">
-
-Lunas
-
-</span>
-
-@endif
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
+    </div>
 
 </x-app-layout>

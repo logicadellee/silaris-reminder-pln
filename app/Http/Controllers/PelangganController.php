@@ -45,6 +45,7 @@ class PelangganController extends Controller
         $request->validate([
             'id_pelanggan' => 'required|unique:pelanggans,id_pelanggan',
             'nama_pelanggan' => 'required',
+            'nominal' => 'nullable|numeric|min:0',
         ]);
 
         $pelanggan = Pelanggan::create($request->all());
@@ -52,9 +53,8 @@ class PelangganController extends Controller
         Tagihan::create([
             'pelanggan_id' => $pelanggan->id,
             'periode' => now()->format('Y-m'),
-            'nominal' => 0,
-            'jatuh_tempo' => now()->endOfMonth(),
-            'status_pembayaran' => 'Belum Bayar',
+            'nominal' => $request->input('nominal', 0),
+            'jatuh_tempo' => now()->startOfMonth()->addDays(19),
             'tanggal_import' => now(),
         ]);
 
@@ -65,7 +65,11 @@ class PelangganController extends Controller
 
     public function edit(Pelanggan $pelanggan)
     {
-        return view('pelanggan.edit', compact('pelanggan'));
+        $tagihan = Tagihan::where('pelanggan_id', $pelanggan->id)
+            ->latest('periode')
+            ->first();
+
+        return view('pelanggan.edit', compact('pelanggan', 'tagihan'));
     }
 
     public function update(Request $request, Pelanggan $pelanggan)
@@ -73,14 +77,21 @@ class PelangganController extends Controller
         $request->validate([
             'id_pelanggan' => 'required|unique:pelanggans,id_pelanggan,' . $pelanggan->id,
             'nama_pelanggan' => 'required',
+            'nominal' => 'nullable|numeric|min:0',
         ]);
 
         $pelanggan->update($request->all());
 
-        Tagihan::where('pelanggan_id', $pelanggan->id)
-        ->update([
-            'updated_at' => now()
-        ]);
+        Tagihan::updateOrCreate(
+            [
+                'pelanggan_id' => $pelanggan->id,
+                'periode' => now()->format('Y-m'),
+            ],
+            [
+                'nominal' => $request->input('nominal', 0),
+                'jatuh_tempo' => now()->startOfMonth()->addDays(19),
+            ]
+        );
 
         return redirect()
             ->route('pelanggan.index')

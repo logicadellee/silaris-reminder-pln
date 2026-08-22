@@ -30,8 +30,7 @@
     <div class="col-md-6">
         <label class="form-label fw-semibold">Golongan Tarif</label>
         <input type="text" name="tarif" class="form-control @error('tarif') is-invalid @enderror"
-            value="{{ old('tarif', $pelanggan->tarif ?? '') }}"
-            placeholder="Contoh: R1, R2, B1">
+            value="{{ old('tarif', $pelanggan->tarif ?? '') }}">
         @error('tarif')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -40,8 +39,7 @@
     <div class="col-md-6">
         <label class="form-label fw-semibold">Daya</label>
         <input type="text" name="daya" class="form-control @error('daya') is-invalid @enderror"
-            value="{{ old('daya', $pelanggan->daya ?? '') }}"
-            placeholder="Contoh: 900 VA, 1300 VA">
+            value="{{ old('daya', $pelanggan->daya ?? '') }}">
         @error('daya')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -50,29 +48,29 @@
     <div class="col-md-6">
         <label class="form-label fw-semibold">Peruntukan Listrik</label>
         <input type="text" name="peruntukan_listrik" class="form-control @error('peruntukan_listrik') is-invalid @enderror"
-            value="{{ old('peruntukan_listrik', $pelanggan->peruntukan_listrik ?? '') }}"
-            placeholder="Contoh: Rumah Tangga, Bisnis">
+            value="{{ old('peruntukan_listrik', $pelanggan->peruntukan_listrik ?? '') }}">
         @error('peruntukan_listrik')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 
-    <div class="col-md-12">
-        <label class="form-label fw-semibold">Alamat</label>
-        <textarea name="alamat" class="form-control @error('alamat') is-invalid @enderror"
-            rows="3" placeholder="Alamat lengkap pelanggan">{{ old('alamat', $pelanggan->alamat ?? '') }}</textarea>
-        @error('alamat')
+    <div class="col-md-6">
+        <label class="form-label fw-semibold">Nominal Tagihan</label>
+        <div class="input-group">
+            <span class="input-group-text">Rp</span>
+            <input type="number" name="nominal" class="form-control @error('nominal') is-invalid @enderror"
+                value="{{ old('nominal', $tagihan->nominal ?? '') }}" min="0">
+        </div>
+        @error('nominal')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 
     <div class="col-md-6">
-        <label class="form-label fw-semibold">Status Pelanggan <span class="text-danger">*</span></label>
-        <select name="status_pelanggan" class="form-select @error('status_pelanggan') is-invalid @enderror" required>
-            <option value="Aktif" {{ old('status_pelanggan', $pelanggan->status_pelanggan ?? 'Aktif') == 'Aktif' ? 'selected' : '' }}>Aktif</option>
-            <option value="Tidak Aktif" {{ old('status_pelanggan', $pelanggan->status_pelanggan ?? '') == 'Tidak Aktif' ? 'selected' : '' }}>Tidak Aktif</option>
-        </select>
-        @error('status_pelanggan')
+        <label class="form-label fw-semibold">Alamat</label>
+        <textarea name="alamat" class="form-control @error('alamat') is-invalid @enderror"
+            rows="3">{{ old('alamat', $pelanggan->alamat ?? '') }}</textarea>
+        @error('alamat')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>

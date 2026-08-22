@@ -2,58 +2,84 @@
     <x-slot name="header">
         @include('components.admin.page-header', [
             'title' => 'Profil Pelanggan',
-            'description' => 'Detail informasi pelanggan dan riwayat tagihan.',
         ])
     </x-slot>
 
-    <x-admin.section-card title="Informasi Pelanggan" description="Data lengkap pelanggan terdaftar dalam sistem SILARIS.">
+    <x-admin.section-card>
+
+        {{-- Identity Header --}}
+        <div class="d-flex align-items-center gap-3 px-3 pt-3 pb-2">
+            <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white fw-bold"
+                 style="width:56px;height:56px;font-size:1.2rem;">
+                {{ strtoupper(substr($pelanggan->nama_pelanggan, 0, 2)) }}
+            </div>
+            <div>
+                <p class="fw-bold mb-0 fs-5">{{ $pelanggan->nama_pelanggan }}</p>
+                <small class="text-muted">Pelanggan {{ $pelanggan->peruntukan_listrik ?? '-' }}</small>
+            </div>
+        </div>
 
         {{-- Info Grid --}}
-        <div class="row g-0">
-            <div class="col-md-6 border-end">
-                <div class="p-3 border-bottom">
+        <div class="row g-3 px-3 pb-3 mt-1">
+            <div class="col-md-6">
+                <div class="border rounded-3 p-3 h-100">
                     <small class="text-muted text-uppercase fw-semibold" style="font-size:0.7rem;letter-spacing:.05em;">ID Pelanggan</small>
                     <p class="fw-bold mb-0 mt-1 fs-6">{{ $pelanggan->id_pelanggan }}</p>
                 </div>
-                <div class="p-3 border-bottom">
+            </div>
+            <div class="col-md-6">
+                <div class="border rounded-3 p-3 h-100">
+                    <small class="text-muted text-uppercase fw-semibold" style="font-size:0.7rem;letter-spacing:.05em;">Nama Pelanggan</small>
+                    <p class="fw-bold mb-0 mt-1 fs-6">{{ $pelanggan->nama_pelanggan }}</p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="border rounded-3 p-3 h-100">
                     <small class="text-muted text-uppercase fw-semibold" style="font-size:0.7rem;letter-spacing:.05em;">Nomor WhatsApp</small>
                     <p class="fw-bold mb-0 mt-1 fs-6">
                         @if($pelanggan->nomor_whatsapp)
-                            <i class="bi bi-whatsapp text-success me-1"></i>{{ $pelanggan->nomor_whatsapp }}
+                            {{ $pelanggan->nomor_whatsapp }}
                         @else
                             <span class="badge text-bg-warning">Belum ada</span>
                         @endif
                     </p>
                 </div>
-                <div class="p-3 border-bottom">
-                    <small class="text-muted text-uppercase fw-semibold" style="font-size:0.7rem;letter-spacing:.05em;">Daya</small>
-                    <p class="fw-bold mb-0 mt-1 fs-6">{{ $pelanggan->daya ? $pelanggan->daya . ' VA' : '-' }}</p>
-                </div>
-                <div class="p-3">
-                <small class="text-muted text-uppercase fw-semibold" style="font-size:0.7rem;letter-spacing:.05em;">Nominal Tagihan</small>
-                <p class="fw-bold mb-0 mt-1 fs-6">
-                     @if($tagihans->isNotEmpty())
-                 Rp {{ number_format($tagihans->first()->nominal, 0, ',', '.') }}
-                @else
-             <span class="text-muted small">Belum ada tagihan</span>
-        @endif
-    </p>
-</div>
             </div>
             <div class="col-md-6">
-                <div class="p-3 border-bottom">
-                    <small class="text-muted text-uppercase fw-semibold" style="font-size:0.7rem;letter-spacing:.05em;">Nama Pelanggan</small>
-                    <p class="fw-bold mb-0 mt-1 fs-6">{{ $pelanggan->nama_pelanggan }}</p>
-                </div>
-                <div class="p-3 border-bottom">
+                <div class="border rounded-3 p-3 h-100">
                     <small class="text-muted text-uppercase fw-semibold" style="font-size:0.7rem;letter-spacing:.05em;">Golongan Tarif</small>
                     <p class="fw-bold mb-0 mt-1 fs-6">{{ $pelanggan->tarif ?? '-' }}</p>
                 </div>
-                <div class="p-3 border-bottom">
+            </div>
+
+            <div class="col-md-6">
+                <div class="border rounded-3 p-3 h-100">
+                    <small class="text-muted text-uppercase fw-semibold" style="font-size:0.7rem;letter-spacing:.05em;">Daya</small>
+                    <p class="fw-bold mb-0 mt-1 fs-6">{{ $pelanggan->daya ? $pelanggan->daya . ' VA' : '-' }}</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="border rounded-3 p-3 h-100">
                     <small class="text-muted text-uppercase fw-semibold" style="font-size:0.7rem;letter-spacing:.05em;">Peruntukan Listrik</small>
                     <p class="fw-bold mb-0 mt-1 fs-6">{{ $pelanggan->peruntukan_listrik ?? '-' }}</p>
                 </div>
-                <div class="p-3">
+            </div>
+
+            <div class="col-md-6">
+                <div class="border rounded-3 p-3 h-100 bg-light">
+                    <small class="text-muted text-uppercase fw-semibold" style="font-size:0.7rem;letter-spacing:.05em;">Nominal Tagihan</small>
+                    <p class="fw-bold mb-0 mt-1 fs-6 text-primary">
+                        @if($tagihans->isNotEmpty())
+                            Rp {{ number_format($tagihans->first()->nominal, 0, ',', '.') }}
+                        @else
+                            <span class="text-muted small">Belum ada tagihan</span>
+                        @endif
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="border rounded-3 p-3 h-100">
                     <small class="text-muted text-uppercase fw-semibold" style="font-size:0.7rem;letter-spacing:.05em;">Alamat</small>
                     <p class="fw-bold mb-0 mt-1 fs-6">{{ $pelanggan->alamat ?? '-' }}</p>
                 </div>
@@ -63,54 +89,13 @@
         {{-- Action Buttons --}}
         <div class="d-flex gap-2 px-3 py-3 border-top bg-light rounded-bottom">
             <a href="{{ route('pelanggan.edit', $pelanggan) }}" class="btn btn-primary btn-sm px-3">
-                <i class="bi bi-pencil-square me-1"></i> Edit Data
+                Edit Data
             </a>
             <a href="{{ route('pelanggan.index') }}" class="btn btn-outline-secondary btn-sm px-3">
-                <i class="bi bi-arrow-left me-1"></i> Kembali
+                Kembali
             </a>
         </div>
 
-    </x-admin.section-card>
-
-    {{-- Riwayat Tagihan --}}
-    <x-admin.section-card title="Riwayat Tagihan" description="Daftar tagihan listrik pelanggan ini.">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th class="text-uppercase small fw-semibold text-muted">Periode</th>
-                        <th class="text-uppercase small fw-semibold text-muted">Nominal</th>
-                        <th class="text-uppercase small fw-semibold text-muted">Jatuh Tempo</th>
-                        <th class="text-uppercase small fw-semibold text-muted">Status</th>
-                        <th class="text-uppercase small fw-semibold text-muted">Tanggal Bayar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($tagihans as $tagihan)
-                        <tr>
-                            <td class="fw-semibold">{{ $tagihan->periode }}</td>
-                            <td>Rp {{ number_format($tagihan->nominal, 0, ',', '.') }}</td>
-                            <td>{{ $tagihan->jatuh_tempo_display }}</td>
-                            <td>
-                                <span class="badge rounded-pill px-3 {{ $tagihan->status_pembayaran == 'Lunas' ? 'text-bg-success' : 'text-bg-danger' }}">
-                                    {{ $tagihan->status_pembayaran }}
-                                </span>
-                            </td>
-                            <td class="text-muted">
-                                {{ $tagihan->tanggal_bayar ? \Carbon\Carbon::parse($tagihan->tanggal_bayar)->format('d M Y') : '-' }}
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center text-muted py-5">
-                                <i class="bi bi-inbox fs-3 d-block mb-2"></i>
-                                Belum ada riwayat tagihan untuk pelanggan ini.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
     </x-admin.section-card>
 
 </x-app-layout>

@@ -82,7 +82,7 @@
                         <th>No. WhatsApp</th>
                         <th>Tarif</th>
                         <th>Daya</th>
-                        <th>Status</th>
+                        <th>Peruntukan</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -101,11 +101,7 @@
                             </td>
                             <td>{{ $pelanggan->tarif ?? '-' }}</td>
                             <td>{{ $pelanggan->daya ?? '-' }}</td>
-                            <td>
-                                <span class="badge {{ $pelanggan->status_pelanggan == 'Aktif' ? 'text-bg-success' : 'text-bg-secondary' }}">
-                                    {{ $pelanggan->status_pelanggan }}
-                                </span>
-                            </td>
+                            <td>{{ $pelanggan->peruntukan_listrik ?? '-' }}</td>
                             <td>
                                 <div class="d-flex gap-1">
                                     <a href="{{ route('pelanggan.show', $pelanggan) }}"
